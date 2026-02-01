@@ -101,44 +101,37 @@ body {
 }
 
 /* ─── DECORATIVE ILLUSTRATIONS ─────────────────────────── */
+
 .deco {
     position: absolute;
-    /* CHANGE: Increased z-index to stay above the casing's background */
     z-index: 10; 
     pointer-events: none;
     filter: drop-shadow(4px 6px 8px rgba(0, 0, 0, 0.45));
 }
 
-/* Top-left mushrooms */
+/* Top-left: Pushed UP and further LEFT */
 .deco-mushroom-tl {
-    top: -25px;
-    left: -35px;
+    top: -45px;      /* Move further up away from screen */
+    left: -40px;     /* Move further left */
     width: 140px;
-    transform: rotate(-5deg);
+    transform: rotate(-10deg);
 }
 
-/* Top-right mushrooms */
+/* Top-right: Pushed UP and further RIGHT */
 .deco-mushroom-tr {
-    top: -15px;
-    right: -30px;
+    top: -40px;      /* Move further up */
+    right: -35px;    /* Move further right */
     width: 120px;
-    transform: rotate(5deg);
+    transform: rotate(12deg);
 }
 
-/* Right side: moth + mushroom stack */
+/* Right side: Moved DOWN to the lower bezel area */
 .deco-moth-mushroom-r {
-    top: 55%; /* Adjusted to match your goal image position */
-    right: -45px;
-    width: 150px;
-    transform: translateY(-50%);
-}
-
-/* Bottom center moth(s) */
-.deco-moth-bottom {
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100px;
+    top: auto;       /* Remove the center positioning */
+    bottom: 60px;    /* Pull it down toward the bottom corner */
+    right: -55px;    /* Push it right so it doesn't touch the screen */
+    width: 160px;
+    transform: rotate(5deg);
 }
 
 /* ─── SCREEN (the teal panel) ──────────────────────────── */
@@ -357,8 +350,9 @@ body {
 }
 
 .bottom-moth {
-    height: 68px;
+    height: 60px;
     width: auto;
+    margin-bottom: 5px; /* Adjusts its height within the bottom-bar */
     position: relative;
     z-index: 1;
     pointer-events: none;
