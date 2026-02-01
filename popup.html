@@ -18,26 +18,29 @@
         </filter>
     </svg>
 
-    <div class="casing">
+    <!-- Container for casing + external decorations -->
+    <div class="device-container">
 
-        <!-- Grain overlay — uses the SVG filter above to simulate plastic texture -->
-        <div class="grain"></div>
-
-        <!-- Decorative illustrations. Positioned absolutely over casing edges.
-             alt="" because they are purely decorative. -->
+        <!-- Decorative illustrations. Positioned OUTSIDE the casing, hanging off edges.
+             They are in the container but NOT inside casing, so they never touch the screen. -->
         <img src="assets/mushroom-top-left.png" class="deco deco-mushroom-tl" alt="">
         <img src="assets/mushroom-top-right.png" class="deco deco-mushroom-tr" alt="">
         <img src="assets/moth-mushroom-right.png" class="deco deco-moth-mushroom-r" alt="">
 
-        <!-- The screen — teal panel where all interaction happens -->
-        <div class="screen">
+        <div class="casing">
 
-            <div class="screen-header">
-                <h1 class="title">Spore Cache</h1>
-                <span class="item-count" id="itemCount">all clear</span>
-            </div>
+            <!-- Grain overlay — uses the SVG filter above to simulate plastic texture -->
+            <div class="grain"></div>
 
-            <!--
+            <!-- The screen — teal panel where all interaction happens -->
+            <div class="screen">
+
+                <div class="screen-header">
+                    <h1 class="title">Spore Cache</h1>
+                    <span class="item-count" id="itemCount">all clear</span>
+                </div>
+
+                <!--
                 Editor wrapper. Contains two things that must scroll together:
                   1. checkbox-layer — absolutely positioned checkboxes that float
                      in the left margin. Created and positioned by popup.js.
@@ -46,19 +49,22 @@
                      to leave room for the checkboxes.
                 The wrapper is the scroll container so both layers move as one unit.
             -->
-            <div class="editor-wrapper" id="editorWrapper">
-                <div class="checkbox-layer" id="checkboxLayer"></div>
-                <div class="editor" id="docEditor" contenteditable="true" spellcheck="false" aria-label="Your notes">
+                <div class="editor-wrapper" id="editorWrapper">
+                    <div class="checkbox-layer" id="checkboxLayer"></div>
+                    <div class="editor" id="docEditor" contenteditable="true" spellcheck="false"
+                        aria-label="Your notes">
+                    </div>
                 </div>
+
             </div>
 
-        </div>
-
-        <!-- Bottom bar. Moth is always visible as the device's face.
+            <!-- Bottom bar. Moth is always visible as the device's face.
              Clear button appears to its left only when completed lines exist. -->
-        <div class="bottom-bar">
-            <button class="clear-btn" id="clearCompleted" aria-label="Clear all completed lines">clear</button>
-            <img src="assets/moth-bottom.png" class="bottom-moth" alt="">
+            <div class="bottom-bar">
+                <button class="clear-btn" id="clearCompleted" aria-label="Clear all completed lines">clear</button>
+                <img src="assets/moth-bottom.png" class="bottom-moth" alt="">
+            </div>
+
         </div>
 
     </div>

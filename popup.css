@@ -37,10 +37,18 @@ body {
     perspective: 1200px;
 }
 
+/* ─── DEVICE CONTAINER ─────────────────────────────────── */
+/* Wrapper that holds both the casing and the external decorations.
+   This allows decorations to be positioned relative to the whole device
+   but OUTSIDE the casing itself. */
+
+.device-container {
+    position: relative;
+    width: 100%;
+}
+
 /* ─── CASING (the plastic device body) ─────────────────── */
-/* overflow: visible is critical — it lets the absolutely-positioned mushrooms
-   render outside the casing box into the body padding area.
-   Two layered gradients: top one is a specular highlight, bottom is the color sweep.
+/* Two layered gradients: top one is a specular highlight, bottom is the color sweep.
    Subtle tilt via transform gives it a physical resting angle. */
 
 .casing {
@@ -69,7 +77,7 @@ body {
     padding: 18px 16px 14px;
     display: flex;
     flex-direction: column;
-    overflow: visible;
+    overflow: hidden; /* Prevent anything from bleeding into casing interior */
     box-shadow:
         0 25px 60px rgba(0, 0, 0, 0.45),
         0 8px 16px rgba(0, 0, 0, 0.3),
@@ -94,51 +102,43 @@ body {
 }
 
 /* ─── DECORATIVE ILLUSTRATIONS ─────────────────────────── */
-/* Mushrooms grow OUTWARD from the casing shell — they extend beyond the
-   casing edges into the body padding area. They do NOT touch the screen.
+/* Mushrooms are positioned OUTSIDE the casing, in the device-container.
+   They hang off the exterior corners of the casing shell.
+   z-index: 1 puts them above the casing background but the casing's
+   overflow: hidden clips anything that would enter the casing interior.
    
-   Layout reference (inside casing):
-     top 0 ──────────────────────────── casing top edge
-     top 18px ─── screen top edge (casing padding)
-     ...screen fills the middle...
-     ~bottom 94px ─── screen bottom edge
-     bottom 94px–0 ─── bottom bar (78px) + bottom padding (14px) + margin (2px)
-   
-   TL & TR mushrooms: anchored at the top corners, extending ABOVE the casing
-     (negative top). Their bottom edges stay above the screen top edge.
-   
-   Right moth-mushroom: anchored at the bottom-right, extending RIGHT off the
-     casing. Positioned in the bottom bar zone, well below the screen.
-   
-   drop-shadow makes them cast onto the casing so they feel physically attached.
-   Small rotations keep placement feeling organic. */
+   The mushrooms anchor to the container corners and extend outward
+   into the body padding area. They NEVER enter the screen zone. */
 
 .deco {
     position: absolute;
-    z-index: 0;
+    z-index: 1;
     pointer-events: none;
     filter: drop-shadow(2px 5px 7px rgba(0, 0, 0, 0.4));
 }
 
+/* Top-left: hangs off upper-left corner, extends up and left */
 .deco-mushroom-tl {
-    top: -52px;
-    left: -38px;
-    width: 110px;
-    transform: rotate(-8deg);
+    top: -30px;
+    left: -20px;
+    width: 90px;
+    transform: rotate(-5deg);
 }
 
+/* Top-right: hangs off upper-right corner, extends up and right */
 .deco-mushroom-tr {
-    top: -48px;
-    right: -36px;
-    width: 100px;
-    transform: rotate(6deg);
+    top: -25px;
+    right: -18px;
+    width: 85px;
+    transform: rotate(4deg);
 }
 
+/* Bottom-right: hangs off lower-right corner, extends down and right */
 .deco-moth-mushroom-r {
-    bottom: -10px;
-    right: -48px;
-    width: 110px;
-    transform: rotate(5deg);
+    bottom: 20px;
+    right: -35px;
+    width: 100px;
+    transform: rotate(3deg);
 }
 
 /* ─── SCREEN (the teal panel) ──────────────────────────── */
