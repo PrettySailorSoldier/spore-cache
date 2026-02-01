@@ -116,20 +116,20 @@ body {
     filter: drop-shadow(2px 5px 7px rgba(0, 0, 0, 0.4));
 }
 
-/* Top-left: hangs off upper-left corner, extends up and left */
+/* Top-left: hangs off upper-left corner, mostly OUTSIDE the casing */
 .deco-mushroom-tl {
-    top: -42px;
-    left: -28px;
-    width: 110px;
-    transform: rotate(-5deg);
+    top: -38px;
+    left: -55px;
+    width: 100px;
+    transform: rotate(-12deg);
 }
 
-/* Top-right: hangs off upper-right corner, extends up and right */
+/* Top-right: hangs off upper-right corner, mostly OUTSIDE the casing */
 .deco-mushroom-tr {
-    top: -38px;
-    right: -26px;
-    width: 105px;
-    transform: rotate(4deg);
+    top: -35px;
+    right: -50px;
+    width: 95px;
+    transform: rotate(10deg);
 }
 
 /* Bottom-right: hangs off lower-right corner, extends down and right */
