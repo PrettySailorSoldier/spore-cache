@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spore Cache</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+
+<body>
+
+    <!-- SVG noise filter for grain/plastic texture on casing. Invisible — defines the filter ID only. -->
+    <svg width="0" height="0" style="position:absolute">
+        <filter id="noise">
+            <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="4" stitchTiles="stitch" />
+            <feColorMatrix type="saturate" values="0" />
+        </filter>
+    </svg>
+
+    <div class="casing">
+
+        <!-- Grain overlay — uses the SVG filter above to simulate plastic texture -->
+        <div class="grain"></div>
+
+        <!-- Decorative illustrations. Positioned absolutely over casing edges.
+             alt="" because they are purely decorative. -->
+        <img src="assets/mushroom-top-left.png" class="deco deco-mushroom-tl" alt="">
+        <img src="assets/mushroom-top-right.png" class="deco deco-mushroom-tr" alt="">
+        <img src="assets/moth-mushroom-right.png" class="deco deco-moth-mushroom-r" alt="">
+
+        <!-- The screen — teal panel where all interaction happens -->
+        <div class="screen">
+
+            <div class="screen-header">
+                <h1 class="title">Spore Cache</h1>
+                <span class="item-count" id="itemCount">all clear</span>
+            </div>
+
+            <!--
+                Editor wrapper. Contains two things that must scroll together:
+                  1. checkbox-layer — absolutely positioned checkboxes that float
+                     in the left margin. Created and positioned by popup.js.
+                     NOT inside the contenteditable.
+                  2. docEditor — the contenteditable document. Has left padding
+                     to leave room for the checkboxes.
+                The wrapper is the scroll container so both layers move as one unit.
+            -->
+            <div class="editor-wrapper" id="editorWrapper">
+                <div class="checkbox-layer" id="checkboxLayer"></div>
+                <div class="editor" id="docEditor" contenteditable="true" spellcheck="false" aria-label="Your notes">
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Bottom bar. Moth is always visible as the device's face.
+             Clear button appears to its left only when completed lines exist. -->
+        <div class="bottom-bar">
+            <button class="clear-btn" id="clearCompleted" aria-label="Clear all completed lines">clear</button>
+            <img src="assets/moth-bottom.png" class="bottom-moth" alt="">
+        </div>
+
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,330 @@
+/* ─── RESET & ROOT ─────────────────────────────────────── */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --casing-orange: #e8934a;
+    --casing-green: #6aaa80;
+    --screen-bg: #a3d9c8;
+    --screen-shadow: rgba(0, 60, 50, 0.25);
+    --text: #1e3d38;
+    --text-dim: rgba(30, 61, 56, 0.55);
+    --check-color: #3d8a6e;
+    --check-fill: #5cb88a;
+    --danger: #d45a5a;
+    --title-color: #6b3fa0;
+    --radius-casing: 22px;
+    --radius-screen: 14px;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    width: 320px;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ─── CASING (the plastic device body) ─────────────────── */
+
+.casing {
+    position: relative;
+    width: 100%;
+    min-height: 460px;
+    max-height: 540px;
+    background: linear-gradient(
+        155deg,
+        #d4734a 0%,
+        #cca050 18%,
+        #8aba7e 38%,
+        #6aaa80 55%,
+        #88b070 72%,
+        #d08850 88%,
+        #e8934a 100%
+    );
+    border-radius: var(--radius-casing);
+    padding: 14px 14px 10px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* ─── GRAIN TEXTURE ────────────────────────────────────── */
+/* Renders SVG fractal noise over the casing to simulate molded plastic.
+   pointer-events: none so it never blocks clicks on anything underneath. */
+
+.grain {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-casing);
+    filter: url(#noise);
+    opacity: 0.13;
+    pointer-events: none;
+    z-index: 999;
+}
+
+/* ─── DECORATIVE ILLUSTRATIONS ─────────────────────────── */
+/* Positioned absolutely. They intentionally overlap the screen edges.
+   pointer-events: none so they never block input or clicks. */
+
+.deco {
+    position: absolute;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.deco-mushroom-tl {
+    top: -10px;
+    left: -14px;
+    width: 168px;
+}
+
+.deco-mushroom-tr {
+    top: -8px;
+    right: -12px;
+    width: 148px;
+}
+
+.deco-moth-mushroom-r {
+    top: 155px;
+    right: -16px;
+    width: 138px;
+}
+
+/* ─── SCREEN (the teal panel) ──────────────────────────── */
+
+.screen {
+    position: relative;
+    z-index: 1;
+    background: var(--screen-bg);
+    border-radius: var(--radius-screen);
+    padding: 14px 16px 12px;
+    box-shadow:
+        inset 0 2px 8px var(--screen-shadow),
+        0 3px 5px rgba(0, 0, 0, 0.18);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 280px;
+    overflow: hidden;
+}
+
+/* ─── SCREEN HEADER ────────────────────────────────────── */
+
+.screen-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+}
+
+.title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--title-color);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.item-count {
+    font-size: 9.5px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-weight: 600;
+}
+
+/* ─── EDITOR WRAPPER ───────────────────────────────────── */
+/* Scrollable container that holds both the checkbox layer and the editor.
+   They scroll as one unit so checkboxes stay aligned with their lines. */
+
+.editor-wrapper {
+    position: relative;
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0; /* lets flex child shrink and scroll */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 60, 50, 0.2) transparent;
+}
+
+.editor-wrapper::-webkit-scrollbar {
+    width: 3px;
+}
+
+.editor-wrapper::-webkit-scrollbar-thumb {
+    background: rgba(0, 60, 50, 0.22);
+    border-radius: 2px;
+}
+
+/* ─── CHECKBOX LAYER ───────────────────────────────────── */
+/* Absolutely positioned layer covering the left margin of the editor.
+   Individual checkboxes are created here by JS with top: Xpx positioning.
+   The layer itself does not capture clicks — only the individual checkboxes do. */
+
+.checkbox-layer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 26px;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Each checkbox — created by popup.js, positioned with inline top style */
+.line-checkbox {
+    position: absolute;
+    left: 2px;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--check-color);
+    border-radius: 3px;
+    background: transparent;
+    cursor: pointer;
+    pointer-events: auto; /* individual checkboxes capture clicks */
+    opacity: 0.2;
+    transition: opacity 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+.line-checkbox:hover {
+    opacity: 0.7;
+}
+
+.line-checkbox.checked {
+    background: var(--check-fill);
+    border-color: var(--check-fill);
+    opacity: 1;
+}
+
+/* Checkmark inside a checked checkbox */
+.line-checkbox.checked::after {
+    content: '✓';
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    line-height: 1;
+}
+
+/* ─── EDITOR (the contenteditable document) ────────────── */
+
+.editor {
+    position: relative;
+    padding-left: 26px; /* room for checkboxes in the margin */
+    padding-right: 2px;
+    min-height: 100%;
+    outline: none;
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* Placeholder text when editor is empty. Toggled via .is-empty class by JS. */
+.editor.is-empty::before {
+    content: 'nothing on your plate ✨';
+    color: var(--text-dim);
+    font-size: 13px;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    left: 26px;
+}
+
+/* Block elements — p and div (Chrome sometimes uses div on Enter) */
+.editor p,
+.editor div[data-id] {
+    margin: 2px 0;
+    min-height: 1.6em; /* empty lines still have height so their checkbox can align */
+}
+
+/* Bullet lists */
+.editor ul {
+    list-style: disc;
+    padding-left: 20px;
+    margin: 1px 0;
+}
+
+.editor li {
+    margin: 2px 0;
+    min-height: 1.6em;
+}
+
+/* Completed lines — .completed class is toggled by JS via renderCheckboxes() */
+.editor p.completed,
+.editor div.completed,
+.editor li.completed {
+    opacity: 0.35;
+}
+
+/* Bold and italic — created by execCommand('bold') / execCommand('italic') */
+.editor b,
+.editor strong {
+    font-weight: 700;
+}
+
+.editor i,
+.editor em {
+    font-style: italic;
+    color: rgba(30, 61, 56, 0.8);
+}
+
+/* ─── BOTTOM BAR ───────────────────────────────────────── */
+
+.bottom-bar {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 78px;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.bottom-moth {
+    height: 68px;
+    width: auto;
+    position: relative;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* ─── CLEAR BUTTON (retro pill style) ──────────────────── */
+/* Hidden by default. popup.js sets display: inline-block when completed lines exist. */
+
+.clear-btn {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #d45a5a;
+    border: 2px solid #a03030;
+    color: #fff;
+    font-size: 9px;
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    padding: 5px 11px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: none;
+    box-shadow: 0 2px 0 #7a2020;
+    transition: background 0.1s ease, transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.clear-btn:hover {
+    background: #e06565;
+}
+
+.clear-btn:active {
+    transform: translateY(calc(-50% + 2px));
+    box-shadow: 0 0px 0 #7a2020;
+}
