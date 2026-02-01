@@ -46,10 +46,7 @@ body {
     width: 100%;
 }
 
-/* ─── CASING (the plastic device body) ─────────────────── */
-/* Two layered gradients: top one is a specular highlight, bottom is the color sweep.
-   Subtle tilt via transform gives it a physical resting angle. */
-
+/* ─── CASING ─────────────────── */
 .casing {
     position: relative;
     width: 100%;
@@ -76,7 +73,10 @@ body {
     padding: 18px 16px 14px;
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* Prevent anything from bleeding into casing interior */
+    
+    /* CHANGE: Removed overflow: hidden so mushrooms can hang off the edge */
+    overflow: visible; 
+    
     box-shadow:
         0 25px 60px rgba(0, 0, 0, 0.45),
         0 8px 16px rgba(0, 0, 0, 0.3),
@@ -101,43 +101,44 @@ body {
 }
 
 /* ─── DECORATIVE ILLUSTRATIONS ─────────────────────────── */
-/* Mushrooms are positioned OUTSIDE the casing, in the device-container.
-   They hang off the exterior corners of the casing shell.
-   z-index: 1 puts them above the casing background but the casing's
-   overflow: hidden clips anything that would enter the casing interior.
-   
-   The mushrooms anchor to the container corners and extend outward
-   into the body padding area. They NEVER enter the screen zone. */
-
 .deco {
     position: absolute;
-    z-index: 1;
+    /* CHANGE: Increased z-index to stay above the casing's background */
+    z-index: 10; 
     pointer-events: none;
-    filter: drop-shadow(2px 5px 7px rgba(0, 0, 0, 0.4));
+    filter: drop-shadow(4px 6px 8px rgba(0, 0, 0, 0.45));
 }
 
-/* Top-left: large purple/blue cluster hanging off upper-left corner */
+/* Top-left mushrooms */
 .deco-mushroom-tl {
-    top: -50px;
-    left: -45px;
-    width: 145px;
+    top: -25px;
+    left: -35px;
+    width: 140px;
     transform: rotate(-5deg);
 }
 
-/* Top-right: pink/yellow mushroom hanging off upper-right corner */
+/* Top-right mushrooms */
 .deco-mushroom-tr {
-    top: -20px;
-    right: -50px;
+    top: -15px;
+    right: -30px;
     width: 120px;
-    transform: rotate(8deg);
+    transform: rotate(5deg);
 }
 
-/* Right side: moth with mushrooms, positioned mid-right hanging off edge */
+/* Right side: moth + mushroom stack */
 .deco-moth-mushroom-r {
-    top: 45%;
-    right: -55px;
-    width: 130px;
-    transform: translateY(-50%) rotate(5deg);
+    top: 55%; /* Adjusted to match your goal image position */
+    right: -45px;
+    width: 150px;
+    transform: translateY(-50%);
+}
+
+/* Bottom center moth(s) */
+.deco-moth-bottom {
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
 }
 
 /* ─── SCREEN (the teal panel) ──────────────────────────── */
