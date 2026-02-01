@@ -106,32 +106,31 @@ body {
     position: absolute;
     z-index: 10; 
     pointer-events: none;
-    filter: drop-shadow(4px 6px 8px rgba(0, 0, 0, 0.45));
+    filter: drop-shadow(5px 8px 10px rgba(0, 0, 0, 0.45));
 }
 
-/* Top-left: Pushed UP and further LEFT */
+/* Top-left: Pushed significantly up and left */
 .deco-mushroom-tl {
-    top: -45px;      /* Move further up away from screen */
-    left: -40px;     /* Move further left */
-    width: 140px;
-    transform: rotate(-10deg);
+    top: -55px;      
+    left: -50px;     
+    width: 150px;
+    transform: rotate(-12deg);
 }
 
-/* Top-right: Pushed UP and further RIGHT */
+/* Top-right: Pushed significantly up and right */
 .deco-mushroom-tr {
-    top: -40px;      /* Move further up */
-    right: -35px;    /* Move further right */
-    width: 120px;
-    transform: rotate(12deg);
+    top: -50px;      
+    right: -45px;    
+    width: 130px;
+    transform: rotate(15deg);
 }
 
-/* Right side: Moved DOWN to the lower bezel area */
+/* Right side: Moved DOWN to the orange casing handle area */
 .deco-moth-mushroom-r {
-    top: auto;       /* Remove the center positioning */
-    bottom: 60px;    /* Pull it down toward the bottom corner */
-    right: -55px;    /* Push it right so it doesn't touch the screen */
-    width: 160px;
-    transform: rotate(5deg);
+    top: 310px;      /* Fixed position to keep it below the screen curve */
+    right: -65px;    
+    width: 170px;
+    transform: rotate(8deg);
 }
 
 /* ─── SCREEN (the teal panel) ──────────────────────────── */
