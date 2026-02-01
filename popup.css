@@ -28,8 +28,8 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    width: 400px;
-    padding: 48px 40px 28px 40px;
+    width: 420px;
+    padding: 70px 50px 30px 50px;
     overflow: visible;
     -webkit-font-smoothing: antialiased;
     background: #1e1e2e;
@@ -114,30 +114,28 @@ body {
 /* brought them closer in so they are actually visible, 
    but kept the rotation to keep them off the text */
 
-/* TOP LEFT */
+/* TOP LEFT — positioned outside the casing, hanging off the corner */
 .deco-mushroom-tl {
-    top: -55px;
-    left: -55px;
-    width: 140px;
-    transform: rotate(-15deg);
+    top: -45px;
+    left: -40px;
+    width: 110px;
+    transform: rotate(-20deg);
 }
 
-/* TOP RIGHT */
+/* TOP RIGHT — positioned outside the casing, hanging off the corner */
 .deco-mushroom-tr {
-    top: -50px;
-    right: -45px;
-    width: 120px;
-    transform: rotate(15deg);
+    top: -45px;
+    right: -40px;
+    width: 110px;
+    transform: rotate(20deg) scaleX(-1);
 }
 
-/* BOTTOM RIGHT */
-/* Moved up slightly from the bottom edge so it's not falling off,
-   but kept small and to the right to clear the teal screen */
+/* BOTTOM RIGHT — moth+mushroom combo hanging off the right edge */
 .deco-moth-mushroom-r {
     top: auto;
-    bottom: 25px;    
-    right: -65px;     
-    width: 130px;     
+    bottom: 60px;    
+    right: -50px;     
+    width: 120px;     
     transform: rotate(5deg);
 }
 
