@@ -116,28 +116,28 @@ body {
     filter: drop-shadow(2px 5px 7px rgba(0, 0, 0, 0.4));
 }
 
-/* Top-left: hangs off upper-left corner, mostly OUTSIDE the casing */
+/* Top-left: large purple/blue cluster hanging off upper-left corner */
 .deco-mushroom-tl {
-    top: -38px;
-    left: -55px;
-    width: 100px;
-    transform: rotate(-12deg);
+    top: -50px;
+    left: -45px;
+    width: 145px;
+    transform: rotate(-5deg);
 }
 
-/* Top-right: hangs off upper-right corner, mostly OUTSIDE the casing */
+/* Top-right: pink/yellow mushroom hanging off upper-right corner */
 .deco-mushroom-tr {
-    top: -35px;
+    top: -20px;
     right: -50px;
-    width: 95px;
-    transform: rotate(10deg);
+    width: 120px;
+    transform: rotate(8deg);
 }
 
-/* Bottom-right: hangs off lower-right corner, extends down and right */
+/* Right side: moth with mushrooms, positioned mid-right hanging off edge */
 .deco-moth-mushroom-r {
-    bottom: 20px;
-    right: -35px;
-    width: 100px;
-    transform: rotate(3deg);
+    top: 45%;
+    right: -55px;
+    width: 130px;
+    transform: translateY(-50%) rotate(5deg);
 }
 
 /* ─── SCREEN (the teal panel) ──────────────────────────── */
