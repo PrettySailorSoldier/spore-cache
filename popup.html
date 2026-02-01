@@ -18,24 +18,27 @@
         </filter>
     </svg>
 
-    <!-- Container for casing + external decorations -->
+    <!--
+        .device-container is the positioning root for ALL decorations.
+        The casing sits inside it. Decos are siblings of the casing so they
+        can extend beyond it freely — no overflow clipping anywhere.
+        Body padding gives decos room to extend without hitting the Chrome popup edge.
+    -->
     <div class="device-container">
 
+        <!-- ── DECORATIONS (siblings of casing, positioned relative to container) ── -->
+        <img src="assets/mushroom-top-left.png" class="deco deco-mushroom-tl" alt="">
+        <img src="assets/mushroom-top-right.png" class="deco deco-mushroom-tr" alt="">
+        <img src="assets/moth-top-center.png" class="deco deco-moth-top" alt="">
+        <img src="assets/moth-mushroom-right.png" class="deco deco-moth-mushroom-r" alt="">
+
+        <!-- ── CASING ── -->
         <div class="casing">
 
-            <!-- Grain overlay — uses the SVG filter above to simulate plastic texture -->
+            <!-- Grain overlay — plastic texture -->
             <div class="grain"></div>
 
-            <!-- Decorative illustrations. All sit on the casing shell.
-                 Mushrooms grow outward off corners. Moths sit on bezel strips.
-                 None touch the screen. -->
-            <img src="assets/mushroom-top-left.png" class="deco deco-mushroom-tl" alt="">
-            <img src="assets/mushroom-top-right.png" class="deco deco-mushroom-tr" alt="">
-            <img src="assets/moth-top-center.png" class="deco deco-moth-top" alt="">
-            <img src="assets/moth-mushroom-right.png" class="deco deco-moth-mushroom-r" alt="">
-            <img src="assets/moth-bottom.png" class="deco deco-moth-bottom" alt="">
-
-            <!-- The screen — teal panel where all interaction happens -->
+            <!-- ── SCREEN ── -->
             <div class="screen">
 
                 <div class="screen-header">
@@ -43,15 +46,6 @@
                     <span class="item-count" id="itemCount">all clear</span>
                 </div>
 
-                <!--
-                Editor wrapper. Contains two things that must scroll together:
-                  1. checkbox-layer — absolutely positioned checkboxes that float
-                     in the left margin. Created and positioned by popup.js.
-                     NOT inside the contenteditable.
-                  2. docEditor — the contenteditable document. Has left padding
-                     to leave room for the checkboxes.
-                The wrapper is the scroll container so both layers move as one unit.
-            -->
                 <div class="editor-wrapper" id="editorWrapper">
                     <div class="checkbox-layer" id="checkboxLayer"></div>
                     <div class="editor" id="docEditor" contenteditable="true" spellcheck="false"
@@ -61,15 +55,14 @@
 
             </div>
 
-            <!-- Bottom bar. Clear button, moth, and butterfly. -->
+            <!-- ── BOTTOM BAR ── -->
             <div class="bottom-bar">
-                <button class="clear-btn" id="clearCompleted" aria-label="Clear all completed lines">clear</button>
+                <button class="options-btn" id="optionsBtn" aria-label="Options">options</button>
                 <img src="assets/moth-bottom.png" class="bottom-moth" alt="">
                 <img src="assets/butterfly-bottom.png" class="bottom-butterfly" alt="">
             </div>
 
         </div>
-
     </div>
 
     <script src="popup.js"></script>
