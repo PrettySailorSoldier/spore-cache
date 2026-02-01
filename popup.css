@@ -100,57 +100,53 @@ body {
     z-index: 999;
 }
 
-/* ─── Z-INDEX ARCHITECTURE (The Fix) ────────────────── */
-/* This ensures the screen is physically "above" the mushrooms. 
-   If a mushroom slips, it gets hidden behind the screen, 
-   keeping your text safe. */
-
-/* ─── DECORATIVE ILLUSTRATIONS ──────────────────────── */
+/* ─── Z-INDEX FIX ──────────────────────────────────────── */
+/* Put decorations back on top so they don't look "cut off" */
 
 .deco {
     position: absolute;
-    z-index: 10; /* Lower than screen */
+    z-index: 50; /* Sits firmly ON TOP of the screen/casing */
     pointer-events: none;
     filter: drop-shadow(4px 6px 8px rgba(0, 0, 0, 0.45));
-    /* This creates a smooth transition if you animate them later */
-    transform-origin: center center; 
 }
 
-/* TOP LEFT: Pushed out to the orange corner */
+/* ─── POSITIONING RE-CALIBRATION ───────────────────────── */
+/* brought them closer in so they are actually visible, 
+   but kept the rotation to keep them off the text */
+
+/* TOP LEFT */
 .deco-mushroom-tl {
-    top: -85px;       /* Moves it vertically completely off the screen area */
-    left: -85px;      /* Moves it laterally onto the bezel edge */
-    width: 135px;
-    transform: rotate(-25deg); /* Angles the cap away from "CACHE" */
+    top: -55px;
+    left: -55px;
+    width: 140px;
+    transform: rotate(-15deg);
 }
 
-/* TOP RIGHT: Pushed out to the orange corner */
+/* TOP RIGHT */
 .deco-mushroom-tr {
-    top: -75px;
-    right: -75px;
-    width: 115px;
-    transform: rotate(25deg); /* Angles the cap away from "ALL CLEAR" */
-}
-
-/* RIGHT SIDE: The biggest change. 
-   Pinned to the BOTTOM-RIGHT corner (not top).
-   Shrunk significantly to fit the "handle" area. */
-.deco-moth-mushroom-r {
-    top: auto;        /* Disable top positioning */
-    bottom: -10px;    /* Anchor to the bottom casing curve */
-    right: -85px;     /* Push it off the side */
-    width: 110px;     /* SHRUNK from 190px -> 110px */
+    top: -50px;
+    right: -45px;
+    width: 120px;
     transform: rotate(15deg);
 }
 
+/* BOTTOM RIGHT */
+/* Moved up slightly from the bottom edge so it's not falling off,
+   but kept small and to the right to clear the teal screen */
+.deco-moth-mushroom-r {
+    top: auto;
+    bottom: 25px;    
+    right: -65px;     
+    width: 130px;     
+    transform: rotate(5deg);
+}
+
 /* ─── SCREEN (the teal panel) ──────────────────────────── */
-/* z-index: 20 keeps the screen above decos (z-index: 10) as a safety net —
-   if any mushroom edge creeps close, the screen covers it cleanly.
-   ::after adds a diagonal glass glare matching light on a recessed LCD. */
+/* ::after adds a diagonal glass glare matching light on a recessed LCD. */
 
 .screen {
     position: relative;
-    z-index: 20; /* Higher than deco */
+    z-index: 1; 
     background: var(--screen-bg);
     border-radius: var(--radius-screen);
     padding: 14px 16px 12px;
