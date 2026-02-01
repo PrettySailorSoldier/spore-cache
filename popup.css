@@ -110,33 +110,40 @@ body {
     filter: drop-shadow(4px 6px 8px rgba(0, 0, 0, 0.45));
 }
 
-/* ─── POSITIONING RE-CALIBRATION ───────────────────────── */
-/* brought them closer in so they are actually visible, 
-   but kept the rotation to keep them off the text */
+/* ─── POSITIONING TO MATCH MOCKUP ───────────────────────── */
 
-/* TOP LEFT — positioned outside the casing, hanging off the corner */
+/* TOP LEFT MUSHROOM — hanging off the top-left corner of the casing */
 .deco-mushroom-tl {
-    top: -45px;
-    left: -40px;
-    width: 110px;
-    transform: rotate(-20deg);
+    top: -50px;
+    left: -45px;
+    width: 120px;
+    transform: rotate(-10deg);
 }
 
-/* TOP RIGHT — positioned outside the casing, hanging off the corner */
+/* TOP RIGHT MUSHROOM — hanging off the top-right corner of the casing */
 .deco-mushroom-tr {
-    top: -45px;
-    right: -40px;
-    width: 110px;
-    transform: rotate(20deg) scaleX(-1);
+    top: -50px;
+    right: -45px;
+    width: 120px;
+    transform: rotate(10deg);
 }
 
-/* BOTTOM RIGHT — moth+mushroom combo hanging off the right edge */
+/* LUNA MOTH — centered at the top of the casing, partially over the screen top */
+.deco-luna-moth-top {
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 65px;
+    z-index: 60;
+}
+
+/* MOTH + MUSHROOM COMBO — hanging off the right side, mid-height */
 .deco-moth-mushroom-r {
     top: auto;
-    bottom: 60px;    
-    right: -50px;     
-    width: 120px;     
-    transform: rotate(5deg);
+    bottom: 80px;    
+    right: -55px;     
+    width: 130px;     
+    transform: rotate(0deg);
 }
 
 /* ─── SCREEN (the teal panel) ──────────────────────────── */
@@ -363,35 +370,35 @@ body {
     filter: drop-shadow(1px 3px 5px rgba(0, 0, 0, 0.4));
 }
 
-/* ─── CLEAR BUTTON (retro pill style) ──────────────────── */
-/* Hidden by default. popup.js sets display: inline-block when completed lines exist. */
+/* ─── OPTIONS BUTTON (soft rounded pill style to match mockup) ────── */
 
-.clear-btn {
+.options-btn {
     position: absolute;
     left: 12px;
     top: 50%;
     transform: translateY(-50%);
-    background: #d45a5a;
-    border: 2px solid #a03030;
-    color: #fff;
+    background: linear-gradient(180deg, #e8a88a 0%, #d4816a 100%);
+    border: 2px solid #c07050;
+    color: #5a3828;
     font-size: 9px;
     font-family: 'Courier New', monospace;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1.2px;
-    padding: 5px 11px;
-    border-radius: 4px;
+    padding: 6px 14px;
+    border-radius: 12px;
     cursor: pointer;
-    display: none;
-    box-shadow: 0 2px 0 #7a2020;
+    box-shadow: 
+        0 2px 0 #a05040,
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
     transition: background 0.1s ease, transform 0.1s ease, box-shadow 0.1s ease;
 }
 
-.clear-btn:hover {
-    background: #e06565;
+.options-btn:hover {
+    background: linear-gradient(180deg, #f0b898 0%, #e09078 100%);
 }
 
-.clear-btn:active {
+.options-btn:active {
     transform: translateY(calc(-50% + 2px));
-    box-shadow: 0 0px 0 #7a2020;
+    box-shadow: 0 0px 0 #a05040;
 }
