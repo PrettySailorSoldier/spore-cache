@@ -24,32 +24,52 @@
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
     width: 320px;
-    overflow: hidden;
+    overflow: visible;
     -webkit-font-smoothing: antialiased;
+    background: #1e1e2e;
+    padding: 24px 18px 28px;
+    perspective: 1200px;
 }
 
 /* ─── CASING (the plastic device body) ─────────────────── */
+/* Two layered gradients: the top one is a specular highlight that simulates
+   light hitting molded plastic. The bottom one is the base color sweep.
+   The subtle rotateX/rotateY tilt gives it a physical resting angle. */
 
 .casing {
     position: relative;
     width: 100%;
-    min-height: 460px;
-    max-height: 540px;
-    background: linear-gradient(
-        155deg,
-        #d4734a 0%,
-        #cca050 18%,
-        #8aba7e 38%,
-        #6aaa80 55%,
-        #88b070 72%,
-        #d08850 88%,
-        #e8934a 100%
-    );
+    min-height: 420px;
+    max-height: 500px;
+    background:
+        linear-gradient(
+            160deg,
+            rgba(255, 255, 255, 0.22) 0%,
+            rgba(255, 255, 255, 0.06) 30%,
+            transparent 55%
+        ),
+        linear-gradient(
+            155deg,
+            #d4734a 0%,
+            #cca050 18%,
+            #8aba7e 38%,
+            #6aaa80 55%,
+            #88b070 72%,
+            #d08850 88%,
+            #e8934a 100%
+        );
     border-radius: var(--radius-casing);
-    padding: 14px 14px 10px;
+    padding: 18px 16px 14px;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow: visible;
+    box-shadow:
+        0 25px 60px rgba(0, 0, 0, 0.45),
+        0 8px 16px rgba(0, 0, 0, 0.3),
+        inset 0 2px 0 rgba(255, 255, 255, 0.25),
+        inset 0 -2px 3px rgba(0, 0, 0, 0.2);
+    transform: rotateX(2deg) rotateY(-1deg);
+    transform-style: preserve-3d;
 }
 
 /* ─── GRAIN TEXTURE ────────────────────────────────────── */
@@ -67,49 +87,76 @@ body {
 }
 
 /* ─── DECORATIVE ILLUSTRATIONS ─────────────────────────── */
-/* Positioned absolutely. They intentionally overlap the screen edges.
-   pointer-events: none so they never block input or clicks. */
+/* z-index: 0 puts them BEHIND the screen (z-index: 3).
+   They sit on the bezel/casing only. Any part that would cross onto the
+   screen gets covered by it — looks like the screen is recessed over them.
+   drop-shadow makes them cast onto the casing so they feel physically attached.
+   Small rotations make placement feel organic rather than pasted. */
 
 .deco {
     position: absolute;
-    z-index: 2;
+    z-index: 0;
     pointer-events: none;
+    filter: drop-shadow(2px 5px 7px rgba(0, 0, 0, 0.4));
 }
 
 .deco-mushroom-tl {
-    top: -10px;
-    left: -14px;
-    width: 168px;
+    top: -8px;
+    left: -12px;
+    width: 158px;
+    transform: rotate(-2deg);
 }
 
 .deco-mushroom-tr {
-    top: -8px;
-    right: -12px;
-    width: 148px;
+    top: -6px;
+    right: -10px;
+    width: 140px;
+    transform: rotate(1.5deg);
 }
 
 .deco-moth-mushroom-r {
-    top: 155px;
-    right: -16px;
-    width: 138px;
+    top: 150px;
+    right: -14px;
+    width: 132px;
+    transform: rotate(2deg);
 }
 
 /* ─── SCREEN (the teal panel) ──────────────────────────── */
+/* z-index: 3 puts this above all decos (z-index: 0) and the grain (999 is
+   fine — grain is just a visual overlay, not interactive).
+   The ::after pseudo-element adds a diagonal glass glare across the top-left
+   corner, matching how light hits a recessed LCD panel. */
 
 .screen {
     position: relative;
-    z-index: 1;
+    z-index: 3;
     background: var(--screen-bg);
     border-radius: var(--radius-screen);
     padding: 14px 16px 12px;
     box-shadow:
-        inset 0 2px 8px var(--screen-shadow),
-        0 3px 5px rgba(0, 0, 0, 0.18);
+        inset 0 3px 10px var(--screen-shadow),
+        inset 0 1px 3px rgba(0, 0, 0, 0.15),
+        0 2px 4px rgba(0, 0, 0, 0.25);
     flex: 1;
     display: flex;
     flex-direction: column;
     min-height: 280px;
     overflow: hidden;
+}
+
+.screen::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.2) 0%,
+        rgba(255, 255, 255, 0.07) 30%,
+        transparent 50%
+    );
+    border-radius: var(--radius-screen);
+    pointer-events: none;
+    z-index: 100;
 }
 
 /* ─── SCREEN HEADER ────────────────────────────────────── */
@@ -276,10 +323,12 @@ body {
 }
 
 /* ─── BOTTOM BAR ───────────────────────────────────────── */
+/* z-index: 3 matches the screen — keeps the moth above any deco overlap
+   in the lower portion of the casing. */
 
 .bottom-bar {
     position: relative;
-    z-index: 1;
+    z-index: 3;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -294,6 +343,7 @@ body {
     position: relative;
     z-index: 1;
     pointer-events: none;
+    filter: drop-shadow(1px 3px 5px rgba(0, 0, 0, 0.4));
 }
 
 /* ─── CLEAR BUTTON (retro pill style) ──────────────────── */
