@@ -106,31 +106,32 @@ body {
     position: absolute;
     z-index: 10; 
     pointer-events: none;
-    filter: drop-shadow(5px 8px 10px rgba(0, 0, 0, 0.45));
+    filter: drop-shadow(4px 6px 8px rgba(0, 0, 0, 0.45));
 }
 
-/* Top-left: Pushed significantly up and left */
+/* Top-left: Pushed WAY up and left to clear "CACHE" */
 .deco-mushroom-tl {
-    top: -55px;      
-    left: -50px;     
-    width: 150px;
-    transform: rotate(-12deg);
-}
-
-/* Top-right: Pushed significantly up and right */
-.deco-mushroom-tr {
     top: -50px;      
-    right: -45px;    
-    width: 130px;
-    transform: rotate(15deg);
+    left: -55px;     
+    width: 160px;
+    transform: rotate(-8deg);
 }
 
-/* Right side: Moved DOWN to the orange casing handle area */
+/* Top-right: Pushed WAY up and right to clear "ALL CLEAR" */
+.deco-mushroom-tr {
+    top: -45px;      
+    right: -45px;    
+    width: 140px;
+    transform: rotate(10deg);
+}
+
+/* Right side: Lowered significantly to sit on the bottom orange curve */
 .deco-moth-mushroom-r {
-    top: 310px;      /* Fixed position to keep it below the screen curve */
-    right: -65px;    
-    width: 170px;
-    transform: rotate(8deg);
+    top: auto;
+    bottom: -30px;   /* Anchors it to the very bottom corner */
+    right: -60px;    
+    width: 190px;
+    transform: rotate(5deg);
 }
 
 /* ─── SCREEN (the teal panel) ──────────────────────────── */
@@ -348,10 +349,11 @@ body {
     flex-shrink: 0;
 }
 
+/* Bottom Center Moth: Keep it tucked in the chin */
 .bottom-moth {
-    height: 60px;
+    height: 55px;
     width: auto;
-    margin-bottom: 5px; /* Adjusts its height within the bottom-bar */
+    margin-bottom: 0;
     position: relative;
     z-index: 1;
     pointer-events: none;
