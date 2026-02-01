@@ -109,29 +109,29 @@ body {
     filter: drop-shadow(4px 6px 8px rgba(0, 0, 0, 0.45));
 }
 
-/* Top-left: Pushed WAY up and left to clear "CACHE" */
+/* Top-left: Rotated further out and pushed UP/LEFT */
 .deco-mushroom-tl {
-    top: -50px;      
-    left: -55px;     
-    width: 160px;
-    transform: rotate(-8deg);
+    top: -65px;      
+    left: -70px;     
+    width: 140px; /* Slightly smaller to clear text */
+    transform: rotate(-15deg);
 }
 
-/* Top-right: Pushed WAY up and right to clear "ALL CLEAR" */
+/* Top-right: Rotated further out and pushed UP/RIGHT */
 .deco-mushroom-tr {
-    top: -45px;      
-    right: -45px;    
-    width: 140px;
-    transform: rotate(10deg);
+    top: -55px;      
+    right: -60px;    
+    width: 120px;
+    transform: rotate(18deg);
 }
 
-/* Right side: Lowered significantly to sit on the bottom orange curve */
+/* Right side cluster: Shrunk and pushed to the bottom handle area */
 .deco-moth-mushroom-r {
     top: auto;
-    bottom: -30px;   /* Anchors it to the very bottom corner */
-    right: -60px;    
-    width: 190px;
-    transform: rotate(5deg);
+    bottom: -15px;   /* Pulls it down away from the screen edge */
+    right: -75px;    /* Pushes it further right off the teal */
+    width: 140px;    /* SHRUNK as requested */
+    transform: rotate(10deg);
 }
 
 /* ─── SCREEN (the teal panel) ──────────────────────────── */
@@ -349,11 +349,11 @@ body {
     flex-shrink: 0;
 }
 
-/* Bottom Center Moth: Keep it tucked in the chin */
+/* Small Bottom Moth: Just for centering */
 .bottom-moth {
-    height: 55px;
+    height: 50px;
     width: auto;
-    margin-bottom: 0;
+    margin-bottom: 2px;
     position: relative;
     z-index: 1;
     pointer-events: none;
