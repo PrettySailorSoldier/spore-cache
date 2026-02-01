@@ -118,17 +118,17 @@ body {
 
 /* Top-left: hangs off upper-left corner, extends up and left */
 .deco-mushroom-tl {
-    top: -30px;
-    left: -20px;
-    width: 90px;
+    top: -42px;
+    left: -28px;
+    width: 110px;
     transform: rotate(-5deg);
 }
 
 /* Top-right: hangs off upper-right corner, extends up and right */
 .deco-mushroom-tr {
-    top: -25px;
-    right: -18px;
-    width: 85px;
+    top: -38px;
+    right: -26px;
+    width: 105px;
     transform: rotate(4deg);
 }
 
