@@ -22,15 +22,14 @@
 }
 
 /* ─── BODY ─────────────────────────────────────────────── */
-/* Width is wider than the casing itself to give mushrooms room to extend
-   outward without hitting the Chrome popup viewport edge.
-   Top padding is taller than the sides because the top mushrooms grow
-   upward the most. The popup auto-sizes to fit all of this. */
+/* Width includes room for mushrooms extending left and right.
+   Padding on all sides gives decorations space to hang off the casing
+   without being clipped by the Chrome popup viewport. */
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    width: 364px;
-    padding: 44px 22px 24px;
+    width: 400px;
+    padding: 48px 40px 28px 40px;
     overflow: visible;
     -webkit-font-smoothing: antialiased;
     background: #1e1e2e;
