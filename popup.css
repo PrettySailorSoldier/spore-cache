@@ -121,24 +121,24 @@ body {
 }
 
 .deco-mushroom-tl {
-    top: -34px;
-    left: -16px;
-    width: 152px;
-    transform: rotate(-3deg);
+    top: -52px;
+    left: -38px;
+    width: 110px;
+    transform: rotate(-8deg);
 }
 
 .deco-mushroom-tr {
-    top: -30px;
-    right: -16px;
-    width: 142px;
-    transform: rotate(2deg);
+    top: -48px;
+    right: -36px;
+    width: 100px;
+    transform: rotate(6deg);
 }
 
 .deco-moth-mushroom-r {
-    bottom: 12px;
-    right: -20px;
-    width: 128px;
-    transform: rotate(3deg);
+    bottom: -10px;
+    right: -48px;
+    width: 110px;
+    transform: rotate(5deg);
 }
 
 /* ─── SCREEN (the teal panel) ──────────────────────────── */
