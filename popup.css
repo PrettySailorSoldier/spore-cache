@@ -124,30 +124,30 @@ body {
 }
 
 .deco-mushroom-tl {
-    top:  -38px;
-    left: -32px;
-    width: 155px;
+    top:  -52px;
+    left: -60px;
+    width: 100px;
     transform: rotate(-5deg);
 }
 
 .deco-mushroom-tr {
-    top:   -35px;
-    right: -30px;
-    width: 148px;
+    top:   -50px;
+    right: -58px;
+    width: 95px;
     transform: rotate(5deg);
 }
 
 .deco-moth-top {
-    top:  8px;
+    top:  10px;
     left: 50%;
     transform: translateX(-50%);
-    width: 52px;
+    width: 42px;
 }
 
 .deco-moth-mushroom-r {
-    top:   185px;
-    right: -48px;
-    width: 135px;
+    top:   195px;
+    right: -85px;
+    width: 120px;
 }
 
 /* ─── SCREEN ───────────────────────────────────────────────── */
