@@ -367,6 +367,29 @@ body {
     justify-content: center;
 }
 
+/* BOTTOM CENTER MOTH (teal) */
+.bottom-moth {
+    height: 55px;
+    width: auto;
+    position: relative;
+    z-index: 1;
+    pointer-events: none;
+    filter: drop-shadow(1px 3px 5px rgba(0, 0, 0, 0.4));
+}
+
+/* BOTTOM RIGHT BUTTERFLY (purple) */
+.bottom-butterfly {
+    height: 38px;
+    width: auto;
+    position: absolute;
+    right: 28px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    pointer-events: none;
+    filter: drop-shadow(1px 3px 5px rgba(0, 0, 0, 0.4));
+}
+
 /* ─── CLEAR BUTTON (retro pill style) ────────────────────── */
 /* Hidden by default. popup.js sets display: inline-block when completed lines exist. */
 
