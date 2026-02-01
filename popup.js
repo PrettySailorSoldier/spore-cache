@@ -6,7 +6,7 @@ const editor        = document.getElementById('docEditor');
 const checkboxLayer = document.getElementById('checkboxLayer');
 const editorWrapper = document.getElementById('editorWrapper');
 const itemCount     = document.getElementById('itemCount');
-const clearBtn      = document.getElementById('clearCompleted');
+const clearBtn      = document.getElementById('clearCompleted'); // May be null if options button replaced it
 
 // ─── STATE ────────────────────────────────────────────────
 // doc.html      — the editor's innerHTML (blocks with data-id attributes)
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     editor.addEventListener('input',  onInput);
     editor.addEventListener('keydown', onKeyDown);
     editor.addEventListener('paste',   onPaste);
-    clearBtn.addEventListener('click', clearCompleted);
+    if (clearBtn) clearBtn.addEventListener('click', clearCompleted);
 });
 
 // ─── INPUT HANDLER ────────────────────────────────────────
@@ -307,9 +307,9 @@ function updateHeader() {
         ? `${activeCount} item${activeCount !== 1 ? 's' : ''}`
         : 'all clear';
 
-    // Show clear button only when there are completed items
+    // Show clear button only when there are completed items (if button exists)
     const hasCompleted = Object.keys(doc.completed).length > 0;
-    clearBtn.style.display = hasCompleted ? 'inline-block' : 'none';
+    if (clearBtn) clearBtn.style.display = hasCompleted ? 'inline-block' : 'none';
 }
 
 // ─── BADGE ────────────────────────────────────────────────

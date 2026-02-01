@@ -147,17 +147,6 @@ body {
     transform: rotate(1deg);
 }
 
-/* BOTTOM MOTH
-   Centered in the bottom bar area (228–380px = 152px of space).
-   Vertical center of that zone = 228 + 76 = 304px.
-   Moth image is roughly 50px tall, so top = 304 - 25 = 279px. */
-.deco-moth-bottom {
-    top: 275px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 56px;
-}
-
 /* ─── SCREEN (the teal panel) ──────────────────────────── */
 
 .screen {
@@ -421,4 +410,37 @@ body {
 .clear-btn:active {
     transform: translateY(calc(-50% + 2px));
     box-shadow: 0 0px 0 #7a2020;
+}
+
+/* ─── OPTIONS BUTTON (soft rounded pill style) ────────────────────── */
+
+.options-btn {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: linear-gradient(180deg, #e8a88a 0%, #d4816a 100%);
+    border: 2px solid #c07050;
+    color: #5a3828;
+    font-size: 9px;
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    padding: 6px 14px;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 
+        0 2px 0 #a05040,
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    transition: background 0.1s ease, transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.options-btn:hover {
+    background: linear-gradient(180deg, #f0b898 0%, #e09078 100%);
+}
+
+.options-btn:active {
+    transform: translateY(calc(-50% + 2px));
+    box-shadow: 0 0px 0 #a05040;
 }
