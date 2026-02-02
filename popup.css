@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════
    SPORE CACHE — popup.css
-   Single source of truth. No patches, no overrides.
+   Whimsical forest-fairy aesthetic with mushroom & moth decorations
    ═══════════════════════════════════════════════════════════════ */
 
 /* ─── RESET & TOKENS ───────────────────────────────────────── */
@@ -12,180 +12,148 @@
 }
 
 :root {
-    --screen-bg:     #a3d9c8;
-    --screen-shadow: rgba(0, 60, 50, 0.25);
-    --text:          #1e3d38;
-    --text-dim:      rgba(30, 61, 56, 0.55);
-    --check-color:   #3d8a6e;
-    --check-fill:    #5cb88a;
-    --title-color:   #6b3fa0;
-    --radius-casing: 22px;
-    --radius-screen: 14px;
+    /* Text colors */
+    --text:           #1e3d38;
+    --text-dim:       rgba(30, 61, 56, 0.55);
+    
+    /* Checkbox colors */
+    --check-color:    #3d8a6e;
+    --check-fill:     #5cb88a;
+    
+    /* Title color */
+    --title-color:    #6b3fa0;
+    
+    /* Casing gradient */
+    --casing-top:     #7fd4c4;
+    --casing-bottom:  #f4a261;
+    
+    /* Screen gradient */
+    --screen-top:     #8ed9c8;
+    --screen-bottom:  #c9b896;
+    
+    /* Bottom bar */
+    --bar-bg:         #e8955a;
+    --bar-border:     #d4824d;
+    --btn-bg:         #f0c8a8;
+    --btn-border:     #c99a7a;
+    --btn-text:       #8b5a3b;
 }
 
 /* ─── BODY ─────────────────────────────────────────────────── */
-/*
-   The Chrome popup sizes itself to fit body content.
-   Padding on top/left/right gives mushrooms room to extend
-   beyond the casing without being clipped by the popup edge.
-   Bottom padding is smaller — nothing extends down that far.
-   Background matches the grey surround in the mockup.
-*/
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    background: #4a4a4a;
-    /*
-       Chrome popup clips at the document boundary — overflow:visible does NOT
-       expand the popup. Every deco must land in positive coordinate space.
-       Top:  mushrooms extend ~38px above their anchor + their own image height (~100px)
-       Sides: right combo extends 48px past casing edge; mushrooms extend ~32px
-       These are generous on purpose — they're the safety margin.
-    */
-    padding: 95px 60px 20px 60px;
+    background: #f5f0e8;
+    padding: 40px 50px 30px;
     -webkit-font-smoothing: antialiased;
+    min-width: 420px;
+    min-height: 520px;
 }
 
 /* ─── DEVICE CONTAINER ─────────────────────────────────────── */
 /*
-   Positioning root for the casing AND all decorations.
-   width is set explicitly so absolute-positioned decos have a
-   known reference width. Everything inside positions relative to this.
+   This is the positioning root for the casing + all decorations.
+   Decorations can extend beyond this via overflow: visible.
 */
 
 .device-container {
     position: relative;
-    width: 280px;
+    width: 320px;
     margin: 0 auto;
+    /* Allow decorations to extend beyond */
+    overflow: visible;
 }
 
 /* ─── CASING ───────────────────────────────────────────────── */
 /*
-   The plastic handheld body.
-   overflow: visible is REQUIRED — mushrooms extend past the edges.
-   No 3D transforms. Flat, like the mockup.
+   The main device body with the gradient background.
 */
 
 .casing {
     position: relative;
     width: 100%;
-    height: 420px;
-    background: linear-gradient(
-        155deg,
-        #d4734a 0%,
-        #cca050 18%,
-        #8aba7e 38%,
-        #6aaa80 55%,
-        #88b070 72%,
-        #d08850 88%,
-        #e8934a 100%
-    );
-    border-radius: var(--radius-casing);
-    padding: 16px 14px 0 14px;
-    display: flex;
-    flex-direction: column;
-    overflow: visible;
-    box-shadow:
-        0 6px 20px rgba(0, 0, 0, 0.35),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    height: 440px;
+    background: linear-gradient(180deg, var(--casing-top) 0%, var(--casing-bottom) 100%);
+    border-radius: 16px;
+    box-shadow: 
+        0 4px 20px rgba(0, 0, 0, 0.15),
+        0 8px 40px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    overflow: hidden;
+    z-index: 1;
 }
 
-/* ─── GRAIN TEXTURE ────────────────────────────────────────── */
-
+/* Grain/texture overlay */
 .grain {
     position: absolute;
     inset: 0;
-    border-radius: var(--radius-casing);
+    opacity: 0.08;
     filter: url(#noise);
-    opacity: 0.15;
     pointer-events: none;
-    z-index: 100;  /* above screen, below decos */
-}
-
-/* ─── DECORATIONS ──────────────────────────────────────────── */
-/*
-   All decos are positioned relative to .device-container.
-   z-index: 200 puts them ON TOP of both the casing and the screen.
-   This is how the mockup works — mushrooms visibly overlap the casing edge
-   and the top moth sits over the bezel strip above the screen.
-
-   Each one is sized and placed to match the mockup by eye:
-     • TL mushroom:  hangs off top-left corner, extends above and left
-     • TR mushroom:  hangs off top-right corner, extends above and right
-     • Top moth:     small, centered on the top bezel between the two mushrooms
-     • Right combo:  moth+mushroom illustration, hangs off the right side mid-height
-*/
-
-.deco {
-    position: absolute;
-    pointer-events: none;
-    z-index: 200;
-    filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.4));
-}
-
-.deco-mushroom-tl {
-    top:  -52px;
-    left: -60px;
-    width: 100px;
-    transform: rotate(-5deg);
-}
-
-.deco-mushroom-tr {
-    top:   -50px;
-    right: -58px;
-    width: 95px;
-    transform: rotate(5deg);
-}
-
-.deco-moth-top {
-    top:  10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 42px;
-}
-
-.deco-moth-mushroom-r {
-    top:   195px;
-    right: -85px;
-    width: 120px;
+    z-index: 2;
 }
 
 /* ─── SCREEN ───────────────────────────────────────────────── */
-/*
-   z-index: 50 — above casing content, below decos (200) and grain (100).
-   The mockup shows the screen as a flat recessed panel. The ::after
-   pseudo-element adds the diagonal glass glare.
-*/
 
 .screen {
-    position: relative;
-    z-index: 50;
-    background: var(--screen-bg);
-    border-radius: var(--radius-screen);
-    padding: 12px 14px 10px;
-    box-shadow:
-        inset 0 3px 10px var(--screen-shadow),
-        inset 0 1px 3px rgba(0, 0, 0, 0.15),
-        0 2px 4px rgba(0, 0, 0, 0.2);
-    flex: 1;
+    position: absolute;
+    top: 20px;
+    left: 16px;
+    right: 16px;
+    bottom: 70px;
+    background: linear-gradient(180deg, var(--screen-top) 0%, var(--screen-bottom) 100%);
+    border-radius: 12px;
+    padding: 14px 16px 12px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    box-shadow:
+        inset 0 2px 8px rgba(0, 60, 50, 0.12),
+        0 1px 0 rgba(255, 255, 255, 0.4);
+    z-index: 3;
 }
 
-.screen::after {
+/* Screen texture overlay - crosshatch pattern */
+.screen::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-        135deg,
-        rgba(255, 255, 255, 0.22) 0%,
-        rgba(255, 255, 255, 0.08) 28%,
-        transparent 50%
-    );
-    border-radius: var(--radius-screen);
+    border-radius: 12px;
+    background-image: 
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 60, 50, 0.03) 2px,
+            rgba(0, 60, 50, 0.03) 3px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 60, 50, 0.03) 2px,
+            rgba(0, 60, 50, 0.03) 3px
+        );
     pointer-events: none;
     z-index: 100;
+}
+
+/* Shine/glare effect */
+.screen::after {
+    content: '';
+    position: absolute;
+    top: 8%;
+    left: 5%;
+    width: 35%;
+    height: 25%;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(255, 255, 255, 0.25) 0%,
+        rgba(255, 255, 255, 0.1) 40%,
+        transparent 70%
+    );
+    pointer-events: none;
+    z-index: 101;
 }
 
 /* ─── SCREEN HEADER ────────────────────────────────────────── */
@@ -194,12 +162,14 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     flex-shrink: 0;
+    position: relative;
+    z-index: 1;
 }
 
 .title {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
     color: var(--title-color);
     letter-spacing: 0.5px;
@@ -223,10 +193,11 @@ body {
     min-height: 0;
     scrollbar-width: thin;
     scrollbar-color: rgba(0, 60, 50, 0.2) transparent;
+    z-index: 1;
 }
 
 .editor-wrapper::-webkit-scrollbar {
-    width: 3px;
+    width: 4px;
 }
 
 .editor-wrapper::-webkit-scrollbar-thumb {
@@ -243,7 +214,7 @@ body {
     width: 26px;
     height: 100%;
     pointer-events: none;
-    z-index: 1;
+    z-index: 2;
 }
 
 .line-checkbox {
@@ -340,66 +311,148 @@ body {
 }
 
 /* ─── BOTTOM BAR ───────────────────────────────────────────── */
-/*
-   Fills the remaining height at the bottom of the casing.
-   Contains: options button (left), teal moth (center), purple butterfly (right).
-   z-index: 60 — above screen, below decos.
-*/
 
 .bottom-bar {
-    position: relative;
-    z-index: 60;
-    flex: 1;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background: var(--bar-bg);
+    border-top: 2px solid var(--bar-border);
+    border-radius: 0 0 16px 16px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    min-height: 100px;
+    padding: 0 16px;
+    gap: 10px;
+    z-index: 4;
 }
 
-/* ── Teal moth — center ── */
-.bottom-moth {
-    height: 60px;
-    width: auto;
-    pointer-events: none;
-    filter: drop-shadow(1px 3px 5px rgba(0, 0, 0, 0.4));
-}
-
-/* ── Purple butterfly — right of moth ── */
-.bottom-butterfly {
-    position: absolute;
-    right: 22px;
-    height: 34px;
-    width: auto;
-    pointer-events: none;
-    filter: drop-shadow(1px 2px 4px rgba(0, 0, 0, 0.35));
-}
-
-/* ── Options button — left ── */
 .options-btn {
-    position: absolute;
-    left: 10px;
-    background: linear-gradient(180deg, #e8a88a 0%, #d4816a 100%);
-    border: 2px solid #c07050;
-    color: #5a3828;
-    font-size: 9px;
-    font-family: 'Courier New', monospace;
+    background: var(--btn-bg);
+    border: 2px solid var(--btn-border);
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1.2px;
-    padding: 5px 12px;
-    border-radius: 12px;
+    letter-spacing: 0.5px;
+    color: var(--btn-text);
     cursor: pointer;
-    box-shadow:
-        0 2px 0 #a05040,
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
-    transition: background 0.1s ease, transform 0.1s ease, box-shadow 0.1s ease;
+    transition: all 0.15s ease;
+    box-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 .options-btn:hover {
-    background: linear-gradient(180deg, #f0b898 0%, #e09078 100%);
+    background: #f5d4b8;
+    transform: translateY(-1px);
+    box-shadow: 
+        0 3px 6px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 .options-btn:active {
-    transform: translateY(2px);
-    box-shadow: 0 0px 0 #a05040;
+    transform: translateY(0);
+    box-shadow: 
+        0 1px 2px rgba(0, 0, 0, 0.1),
+        inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Bottom bar moths/butterflies */
+.bottom-moth {
+    width: 50px;
+    height: auto;
+    margin-left: auto;
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.15));
+}
+
+.bottom-butterfly {
+    width: 45px;
+    height: auto;
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.15));
+}
+
+/* ─── DECORATIONS ──────────────────────────────────────────── */
+/*
+   All decorations are positioned relative to .device-container.
+   They use negative positioning to extend beyond the casing edges.
+*/
+
+.deco {
+    position: absolute;
+    pointer-events: none;
+    z-index: 10;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+/* Top-left mushroom cluster */
+.deco-mushroom-tl {
+    width: 100px;
+    height: auto;
+    top: -35px;
+    left: -40px;
+    transform: rotate(-8deg);
+    z-index: 10;
+}
+
+/* Top-right mushroom */
+.deco-mushroom-tr {
+    width: 90px;
+    height: auto;
+    top: -30px;
+    right: -35px;
+    transform: rotate(5deg);
+    z-index: 10;
+}
+
+/* Top center moth (luna moth) */
+.deco-moth-top {
+    width: 55px;
+    height: auto;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 11;
+}
+
+/* Right side moth + mushroom cluster */
+.deco-moth-mushroom-r {
+    width: 120px;
+    height: auto;
+    top: 50%;
+    right: -55px;
+    transform: translateY(-50%) rotate(-5deg);
+    z-index: 10;
+}
+
+/* ─── RESPONSIVE / HOVER EFFECTS ───────────────────────────── */
+
+/* Subtle animation on decorations */
+.deco {
+    transition: transform 0.3s ease;
+}
+
+.device-container:hover .deco-mushroom-tl {
+    transform: rotate(-10deg) scale(1.02);
+}
+
+.device-container:hover .deco-mushroom-tr {
+    transform: rotate(7deg) scale(1.02);
+}
+
+.device-container:hover .deco-moth-top {
+    transform: translateX(-50%) translateY(-2px);
+}
+
+.device-container:hover .deco-moth-mushroom-r {
+    transform: translateY(-50%) rotate(-3deg) scale(1.02);
+}
+
+/* ─── SELECTION STYLING ────────────────────────────────────── */
+
+::selection {
+    background: rgba(107, 63, 160, 0.25);
+    color: inherit;
 }
