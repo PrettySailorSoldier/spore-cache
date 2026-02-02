@@ -91,6 +91,27 @@ function onKeyDown(e) {
             return;
         }
     }
+
+    // Backspace at start of empty <li> → outdent back to regular line with checkbox
+    if (e.key === 'Backspace') {
+        const block = getActiveBlock();
+        if (block && block.tagName === 'LI') {
+            const sel = window.getSelection();
+            if (sel.rangeCount) {
+                const range = sel.getRangeAt(0);
+                // Check if cursor is at the very start of the li
+                const atStart = range.collapsed && range.startOffset === 0 && 
+                    (range.startContainer === block || range.startContainer === block.firstChild);
+                // Or if the li is empty
+                const isEmpty = block.textContent.trim() === '';
+                if (atStart || isEmpty) {
+                    e.preventDefault();
+                    outdent();
+                    return;
+                }
+            }
+        }
+    }
 }
 
 // ─── INDENT: convert current p/div into a ul > li ─────────
@@ -229,6 +250,9 @@ function renderCheckboxes() {
 
         // Apply or remove completed styling on the block
         block.classList.toggle('completed', !!doc.completed[id]);
+
+        // Skip checkboxes for <li> elements — they have bullet markers instead
+        if (block.tagName === 'LI') return;
 
         // Calculate vertical position
         const blockRect = block.getBoundingClientRect();
