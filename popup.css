@@ -457,3 +457,420 @@ body {
     background: rgba(107, 63, 160, 0.25);
     color: inherit;
 }
+
+/* ─── OPTIONS PANEL ────────────────────────────────────────── */
+
+.options-panel {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(180deg, #f8f4ef 0%, #efe8df 100%);
+    border-radius: 12px 12px 16px 16px;
+    box-shadow: 
+        0 -4px 20px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    z-index: 50;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.options-panel.open {
+    transform: translateY(0);
+}
+
+.options-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.options-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--title-color);
+}
+
+.options-close {
+    width: 24px;
+    height: 24px;
+    border: none;
+    background: rgba(0, 0, 0, 0.06);
+    border-radius: 6px;
+    color: var(--text-dim);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.options-close:hover {
+    background: rgba(0, 0, 0, 0.12);
+    color: var(--text);
+}
+
+.options-content {
+    padding: 12px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.option-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.option-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+/* Toggle Switch */
+.toggle-switch {
+    position: relative;
+    width: 40px;
+    height: 22px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 11px;
+    transition: all 0.25s ease;
+}
+
+.toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    left: 3px;
+    bottom: 3px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: transform 0.25s ease;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+    background: var(--check-fill);
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+    transform: translateX(18px);
+}
+
+/* Select Dropdown */
+.option-select {
+    padding: 6px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text);
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.option-select:hover {
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+.option-select:focus {
+    outline: none;
+    border-color: var(--check-fill);
+    box-shadow: 0 0 0 2px rgba(92, 184, 138, 0.2);
+}
+
+/* Color Swatches */
+.color-swatches {
+    display: flex;
+    gap: 8px;
+}
+
+.swatch {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    background: var(--swatch-color);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.swatch:hover {
+    transform: scale(1.1);
+}
+
+.swatch.active {
+    border-color: var(--text);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8), 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Divider */
+.option-divider {
+    height: 1px;
+    background: rgba(0, 0, 0, 0.08);
+    margin: 4px 0;
+}
+
+/* Action Buttons */
+.option-action {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 10px 12px;
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.option-action:hover {
+    background: #f8f5f0;
+    border-color: rgba(0, 0, 0, 0.15);
+}
+
+.option-action:active {
+    background: #f0ebe5;
+}
+
+.completed-count {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-dim);
+    background: rgba(0, 0, 0, 0.06);
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+.completed-count:empty {
+    display: none;
+}
+
+/* ─── DARK MODE ────────────────────────────────────────────── */
+
+body.dark-mode {
+    background: #1a1a1a;
+}
+
+body.dark-mode .casing {
+    --casing-top:     #2d4a44;
+    --casing-bottom:  #4a3020;
+    background: linear-gradient(180deg, var(--casing-top) 0%, var(--casing-bottom) 100%);
+}
+
+body.dark-mode .screen {
+    --screen-top:     #1e3530;
+    --screen-bottom:  #3a2d20;
+    background: linear-gradient(180deg, var(--screen-top) 0%, var(--screen-bottom) 100%);
+}
+
+body.dark-mode .screen::before {
+    background-image: 
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(255, 255, 255, 0.02) 2px,
+            rgba(255, 255, 255, 0.02) 3px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 2px,
+            rgba(255, 255, 255, 0.02) 2px,
+            rgba(255, 255, 255, 0.02) 3px
+        );
+}
+
+body.dark-mode .screen::after {
+    background: radial-gradient(
+        ellipse at center,
+        rgba(255, 255, 255, 0.08) 0%,
+        rgba(255, 255, 255, 0.03) 40%,
+        transparent 70%
+    );
+}
+
+body.dark-mode .title {
+    color: #b88fd8;
+}
+
+body.dark-mode .item-count {
+    color: rgba(255, 255, 255, 0.45);
+}
+
+body.dark-mode .editor {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+body.dark-mode .editor.is-empty::before {
+    color: rgba(255, 255, 255, 0.35);
+}
+
+body.dark-mode .editor i,
+body.dark-mode .editor em {
+    color: rgba(255, 255, 255, 0.65);
+}
+
+body.dark-mode .line-checkbox {
+    border-color: #5cb88a;
+}
+
+body.dark-mode .line-checkbox.checked {
+    background: #5cb88a;
+    border-color: #5cb88a;
+}
+
+body.dark-mode .bottom-bar {
+    --bar-bg: #3a2515;
+    --bar-border: #4a3020;
+    background: var(--bar-bg);
+    border-top-color: var(--bar-border);
+}
+
+body.dark-mode .options-btn {
+    --btn-bg: #5a4030;
+    --btn-border: #6a5040;
+    --btn-text: #d4c4b4;
+    background: var(--btn-bg);
+    border-color: var(--btn-border);
+    color: var(--btn-text);
+}
+
+body.dark-mode .options-btn:hover {
+    background: #6a5040;
+}
+
+body.dark-mode .options-panel {
+    background: linear-gradient(180deg, #2a2520 0%, #1a1510 100%);
+    box-shadow: 
+        0 -4px 20px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .options-header {
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark-mode .options-title {
+    color: #b88fd8;
+}
+
+body.dark-mode .options-close {
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.5);
+}
+
+body.dark-mode .options-close:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+body.dark-mode .option-label {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+body.dark-mode .toggle-slider {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+body.dark-mode .option-select {
+    background: #3a3530;
+    border-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.85);
+}
+
+body.dark-mode .option-divider {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+body.dark-mode .option-action {
+    background: #3a3530;
+    border-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.85);
+}
+
+body.dark-mode .option-action:hover {
+    background: #4a4540;
+}
+
+body.dark-mode .completed-count {
+    color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .editor-wrapper::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+body.dark-mode ::selection {
+    background: rgba(184, 143, 216, 0.35);
+}
+
+/* ─── ACCENT COLORS ────────────────────────────────────────── */
+
+body[data-accent="teal"] {
+    --title-color: #3d8a6e;
+    --check-color: #3d8a6e;
+    --check-fill:  #5cb88a;
+}
+
+body[data-accent="coral"] {
+    --title-color: #e07850;
+    --check-color: #c06040;
+    --check-fill:  #e07850;
+}
+
+body[data-accent="gold"] {
+    --title-color: #c9a227;
+    --check-color: #a08020;
+    --check-fill:  #c9a227;
+}
+
+body[data-accent="purple"] {
+    --title-color: #6b3fa0;
+    --check-color: #3d8a6e;
+    --check-fill:  #5cb88a;
+}
+
+body.dark-mode[data-accent="teal"] .title,
+body.dark-mode[data-accent="teal"] .options-title {
+    color: #6ed4b4;
+}
+
+body.dark-mode[data-accent="coral"] .title,
+body.dark-mode[data-accent="coral"] .options-title {
+    color: #ff9070;
+}
+
+body.dark-mode[data-accent="gold"] .title,
+body.dark-mode[data-accent="gold"] .options-title {
+    color: #e9c247;
+}

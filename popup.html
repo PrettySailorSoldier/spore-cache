@@ -62,6 +62,65 @@
                 <img src="assets/butterfly-bottom.png" class="bottom-butterfly" alt="">
             </div>
 
+            <!-- ── OPTIONS PANEL ── -->
+            <div class="options-panel" id="optionsPanel">
+                <div class="options-header">
+                    <span class="options-title">Settings</span>
+                    <button class="options-close" id="optionsClose" aria-label="Close">✕</button>
+                </div>
+
+                <div class="options-content">
+                    <!-- Dark Mode Toggle -->
+                    <div class="option-row">
+                        <span class="option-label">Dark Mode</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="darkModeToggle">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <!-- Font Size -->
+                    <div class="option-row">
+                        <span class="option-label">Font Size</span>
+                        <select id="fontSizeSelect" class="option-select">
+                            <option value="11">Small</option>
+                            <option value="13" selected>Medium</option>
+                            <option value="15">Large</option>
+                            <option value="17">Extra Large</option>
+                        </select>
+                    </div>
+
+                    <!-- Accent Color -->
+                    <div class="option-row">
+                        <span class="option-label">Accent</span>
+                        <div class="color-swatches" id="accentSwatches">
+                            <button class="swatch" data-color="purple" style="--swatch-color: #6b3fa0"
+                                aria-label="Purple"></button>
+                            <button class="swatch" data-color="teal" style="--swatch-color: #3d8a6e"
+                                aria-label="Teal"></button>
+                            <button class="swatch" data-color="coral" style="--swatch-color: #e07850"
+                                aria-label="Coral"></button>
+                            <button class="swatch" data-color="gold" style="--swatch-color: #c9a227"
+                                aria-label="Gold"></button>
+                        </div>
+                    </div>
+
+                    <!-- Divider -->
+                    <div class="option-divider"></div>
+
+                    <!-- Clear Completed -->
+                    <button class="option-action" id="clearCompletedBtn">
+                        <span>Clear Completed</span>
+                        <span class="completed-count" id="completedCount"></span>
+                    </button>
+
+                    <!-- Export Data -->
+                    <button class="option-action" id="exportBtn">
+                        Export Notes
+                    </button>
+                </div>
+            </div>
+
         </div>
     </div>
 

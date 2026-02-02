@@ -1,22 +1,34 @@
 // ─── CONFIG ───────────────────────────────────────────────
 const STORAGE_KEY = 'sporecache_doc';
+const SETTINGS_KEY = 'sporecache_settings';
 
 // ─── DOM REFS ─────────────────────────────────────────────
-const editor        = document.getElementById('docEditor');
-const checkboxLayer = document.getElementById('checkboxLayer');
-const editorWrapper = document.getElementById('editorWrapper');
-const itemCount     = document.getElementById('itemCount');
-const clearBtn      = document.getElementById('clearCompleted'); // May be null if options button replaced it
+const editor          = document.getElementById('docEditor');
+const checkboxLayer   = document.getElementById('checkboxLayer');
+const editorWrapper   = document.getElementById('editorWrapper');
+const itemCount       = document.getElementById('itemCount');
+const optionsBtn      = document.getElementById('optionsBtn');
+const optionsPanel    = document.getElementById('optionsPanel');
+const optionsClose    = document.getElementById('optionsClose');
+const darkModeToggle  = document.getElementById('darkModeToggle');
+const fontSizeSelect  = document.getElementById('fontSizeSelect');
+const accentSwatches  = document.getElementById('accentSwatches');
+const clearCompletedBtn = document.getElementById('clearCompletedBtn');
+const completedCount  = document.getElementById('completedCount');
+const exportBtn       = document.getElementById('exportBtn');
 
 // ─── STATE ────────────────────────────────────────────────
 // doc.html      — the editor's innerHTML (blocks with data-id attributes)
 // doc.completed — { blockId: completedAtTimestamp, ... }
 let doc = { html: '', completed: {} };
+let settings = { darkMode: false, fontSize: 13, accent: 'purple' };
 let saveTimer = null;
 
 // ─── INIT ─────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', async () => {
     await loadDoc();
+    await loadSettings();
+    applySettings();
 
     editor.innerHTML = doc.html;
     syncBlocks();
@@ -29,7 +41,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     editor.addEventListener('input',  onInput);
     editor.addEventListener('keydown', onKeyDown);
     editor.addEventListener('paste',   onPaste);
-    if (clearBtn) clearBtn.addEventListener('click', clearCompleted);
+
+    // Options panel events
+    optionsBtn.addEventListener('click', openOptions);
+    optionsClose.addEventListener('click', closeOptions);
+    darkModeToggle.addEventListener('change', onDarkModeChange);
+    fontSizeSelect.addEventListener('change', onFontSizeChange);
+    accentSwatches.addEventListener('click', onAccentClick);
+    clearCompletedBtn.addEventListener('click', () => {
+        clearCompleted();
+        updateCompletedCount();
+    });
+    exportBtn.addEventListener('click', exportNotes);
 });
 
 // ─── INPUT HANDLER ────────────────────────────────────────
@@ -444,4 +467,110 @@ function focusEnd() {
     range.collapse(false);
     sel.removeAllRanges();
     sel.addRange(range);
+}
+
+// ─── OPTIONS PANEL ────────────────────────────────────────
+
+function openOptions() {
+    optionsPanel.classList.add('open');
+    updateCompletedCount();
+}
+
+function closeOptions() {
+    optionsPanel.classList.remove('open');
+}
+
+function updateCompletedCount() {
+    const count = Object.keys(doc.completed).length;
+    completedCount.textContent = count > 0 ? count : '';
+}
+
+// ─── SETTINGS ─────────────────────────────────────────────
+
+async function loadSettings() {
+    try {
+        const result = await chrome.storage.local.get([SETTINGS_KEY]);
+        if (result[SETTINGS_KEY]) {
+            settings = { ...settings, ...result[SETTINGS_KEY] };
+        }
+    } catch (err) {
+        console.error('Spore Cache settings load error:', err);
+    }
+}
+
+function saveSettings() {
+    chrome.storage.local.set({ [SETTINGS_KEY]: settings }).catch(err => {
+        console.error('Spore Cache settings save error:', err);
+    });
+}
+
+function applySettings() {
+    // Dark mode
+    document.body.classList.toggle('dark-mode', settings.darkMode);
+    darkModeToggle.checked = settings.darkMode;
+
+    // Font size
+    editor.style.fontSize = settings.fontSize + 'px';
+    fontSizeSelect.value = settings.fontSize;
+
+    // Accent color
+    document.body.setAttribute('data-accent', settings.accent);
+    document.querySelectorAll('.swatch').forEach(swatch => {
+        swatch.classList.toggle('active', swatch.dataset.color === settings.accent);
+    });
+}
+
+function onDarkModeChange(e) {
+    settings.darkMode = e.target.checked;
+    document.body.classList.toggle('dark-mode', settings.darkMode);
+    saveSettings();
+}
+
+function onFontSizeChange(e) {
+    settings.fontSize = parseInt(e.target.value, 10);
+    editor.style.fontSize = settings.fontSize + 'px';
+    renderCheckboxes(); // Re-render checkboxes since line heights may have changed
+    saveSettings();
+}
+
+function onAccentClick(e) {
+    const swatch = e.target.closest('.swatch');
+    if (!swatch) return;
+
+    settings.accent = swatch.dataset.color;
+    document.body.setAttribute('data-accent', settings.accent);
+
+    // Update active state
+    document.querySelectorAll('.swatch').forEach(s => {
+        s.classList.toggle('active', s.dataset.color === settings.accent);
+    });
+
+    saveSettings();
+}
+
+function exportNotes() {
+    // Convert editor content to plain text
+    const lines = [];
+    getAllBlocks().forEach(block => {
+        const prefix = block.tagName === 'LI' ? '• ' : '';
+        const status = doc.completed[block.dataset.id] ? '[✓] ' : '[ ] ';
+        lines.push(status + prefix + block.textContent);
+    });
+
+    const text = lines.join('\n');
+    
+    // Create and download file
+    const blob = new Blob([text], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'spore-cache-notes.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+
+    // Brief feedback
+    exportBtn.textContent = 'Exported!';
+    setTimeout(() => {
+        exportBtn.textContent = 'Export Notes';
+    }, 1500);
 }
