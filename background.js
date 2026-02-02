@@ -4,6 +4,9 @@
 //      removes stale blocks, saves the cleaned document back.
 //   2. Restore the badge count when the browser starts up (badges don't persist
 //      across browser restarts).
+//
+// NOTE: DOMParser is NOT available in service workers (Manifest V3).
+// We use regex-based parsing instead.
 
 const STORAGE_KEY = 'sporecache_doc';
 const ALARM_NAME  = 'autoClear';
@@ -25,6 +28,45 @@ function ensureAlarm() {
     });
 }
 
+// ─── HTML PARSING HELPERS (no DOMParser in service workers) ───
+// Extract all data-id values from a given tag pattern
+function extractDataIds(html, tagPattern) {
+    const ids = [];
+    // Match elements with data-id attribute
+    const regex = new RegExp(`<${tagPattern}[^>]*data-id="([^"]*)"[^>]*>`, 'gi');
+    let match;
+    while ((match = regex.exec(html)) !== null) {
+        ids.push(match[1]);
+    }
+    return ids;
+}
+
+// Remove an element with a specific data-id from HTML
+function removeElementById(html, id) {
+    // Try to remove <li> elements (self-closing or with content)
+    let modified = html.replace(
+        new RegExp(`<li[^>]*data-id="${id}"[^>]*>.*?</li>`, 'gis'),
+        ''
+    );
+    
+    // Try to remove <p> elements
+    modified = modified.replace(
+        new RegExp(`<p[^>]*data-id="${id}"[^>]*>.*?</p>`, 'gis'),
+        ''
+    );
+    
+    // Try to remove <div> elements (be careful with nesting)
+    modified = modified.replace(
+        new RegExp(`<div[^>]*data-id="${id}"[^>]*>.*?</div>`, 'gis'),
+        ''
+    );
+    
+    // Clean up empty <ul> elements
+    modified = modified.replace(/<ul[^>]*>\s*<\/ul>/gi, '');
+    
+    return modified;
+}
+
 // ─── AUTO-CLEAR ───────────────────────────────────────────
 chrome.alarms.onAlarm.addListener(async (alarm) => {
     if (alarm.name !== ALARM_NAME) return;
@@ -42,29 +84,21 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
 
     if (idsToRemove.length === 0) return;
 
-    // Parse the HTML to remove those blocks from the document
-    const parser  = new DOMParser();
-    const tempDoc = parser.parseFromString(`<div id="root">${doc.html}</div>`, 'text/html');
-    const root    = tempDoc.getElementById('root');
-    let changed   = false;
+    // Remove elements with those IDs from the HTML using regex
+    let html = doc.html;
+    let changed = false;
 
     idsToRemove.forEach(id => {
-        const block = root.querySelector(`[data-id="${id}"]`);
-        if (block) {
-            if (block.tagName === 'LI') {
-                const ul = block.parentElement;
-                block.remove();
-                if (ul && ul.children.length === 0) ul.remove(); // clean up empty <ul>
-            } else {
-                block.remove();
-            }
+        const before = html;
+        html = removeElementById(html, id);
+        if (html !== before) {
+            changed = true;
         }
         delete doc.completed[id];
-        changed = true;
     });
 
     if (changed) {
-        doc.html = root.innerHTML;
+        doc.html = html;
         await chrome.storage.local.set({ [STORAGE_KEY]: doc });
         setBadge(doc);
     }
@@ -77,7 +111,7 @@ chrome.runtime.onStartup.addListener(async () => {
 });
 
 // ─── BADGE HELPER ─────────────────────────────────────────
-// Parses the stored HTML to count active top-level items.
+// Parses the stored HTML to count active top-level items using regex.
 // Same counting rules as popup.js: top-level p/div = 1, ul = 1 if any li is active.
 function setBadge(doc) {
     if (!doc || !doc.html) {
@@ -85,22 +119,22 @@ function setBadge(doc) {
         return;
     }
 
-    const parser    = new DOMParser();
-    const tempDoc   = parser.parseFromString(`<div id="root">${doc.html}</div>`, 'text/html');
-    const root      = tempDoc.getElementById('root');
     const completed = doc.completed || {};
-    let count       = 0;
+    const html = doc.html;
+    let count = 0;
 
-    Array.from(root.children).forEach(el => {
-        if ((el.tagName === 'P' || el.tagName === 'DIV') && el.dataset.id) {
-            if (!completed[el.dataset.id]) count++;
-        }
-        if (el.tagName === 'UL') {
-            const hasActive = Array.from(el.querySelectorAll('li')).some(
-                li => li.dataset.id && !completed[li.dataset.id]
-            );
-            if (hasActive) count++;
-        }
+    // Count top-level <p> and <div> elements with data-id that are not completed
+    const pDivIds = extractDataIds(html, 'p|div');
+    pDivIds.forEach(id => {
+        if (!completed[id]) count++;
+    });
+
+    // Check if there are any <ul> elements with active <li> items
+    const ulMatches = html.match(/<ul[^>]*>[\s\S]*?<\/ul>/gi) || [];
+    ulMatches.forEach(ulHtml => {
+        const liIds = extractDataIds(ulHtml, 'li');
+        const hasActive = liIds.some(id => !completed[id]);
+        if (hasActive) count++;
     });
 
     chrome.action.setBadgeText({ text: count > 0 ? String(count) : '' });
