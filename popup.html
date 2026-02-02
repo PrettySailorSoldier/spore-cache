@@ -10,34 +10,59 @@
 
 <body>
 
-    <!-- The device wrapper — contains all layers -->
-    <div class="device">
+    <!-- SVG noise filter for grain/plastic texture on casing. Invisible — defines the filter ID only. -->
+    <svg width="0" height="0" style="position:absolute">
+        <filter id="noise">
+            <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="4" stitchTiles="stitch" />
+            <feColorMatrix type="saturate" values="0" />
+        </filter>
+    </svg>
 
-        <!-- Layer 1: Base casing (gradient + bottom bar + interior decorations) -->
-        <img src="assets/base.png" class="layer-base" alt="">
+    <!--
+        .device-container is the positioning root for ALL decorations.
+        The casing sits inside it. Decos are siblings of the casing so they
+        can extend beyond it freely — no overflow clipping anywhere.
+        Body padding gives decos room to extend without hitting the Chrome popup edge.
+    -->
+    <div class="device-container">
 
-        <!-- Layer 2: Screen (teal rectangle positioned over screen area) -->
-        <img src="assets/screen.png" class="layer-screen" alt="">
+        <!-- ── DECORATIONS (siblings of casing, positioned relative to container) ── -->
+        <img src="assets/mushroom-top-left.png" class="deco deco-mushroom-tl" alt="">
+        <img src="assets/mushroom-top-right.png" class="deco deco-mushroom-tr" alt="">
+        <img src="assets/moth-top-center.png" class="deco deco-moth-top" alt="">
+        <img src="assets/moth-mushroom-right.png" class="deco deco-moth-mushroom-r" alt="">
 
-        <!-- Layer 3: Mushroom cluster (positioned on right, extends beyond casing) -->
-        <img src="assets/mushroom-right.png" class="layer-mushroom-right" alt="">
+        <!-- ── CASING ── -->
+        <div class="casing">
 
-        <!-- Layer 4: Content overlay (the actual editable screen content) -->
-        <div class="screen-content">
+            <!-- Grain overlay — plastic texture -->
+            <div class="grain"></div>
 
-            <div class="screen-header">
-                <h1 class="title">Spore Cache</h1>
-                <span class="item-count" id="itemCount">all clear</span>
+            <!-- ── SCREEN ── -->
+            <div class="screen">
+
+                <div class="screen-header">
+                    <h1 class="title">Spore Cache</h1>
+                    <span class="item-count" id="itemCount">all clear</span>
+                </div>
+
+                <div class="editor-wrapper" id="editorWrapper">
+                    <div class="checkbox-layer" id="checkboxLayer"></div>
+                    <div class="editor" id="docEditor" contenteditable="true" spellcheck="false"
+                        aria-label="Your notes">
+                    </div>
+                </div>
+
             </div>
 
-            <div class="editor-wrapper" id="editorWrapper">
-                <div class="checkbox-layer" id="checkboxLayer"></div>
-                <div class="editor" id="docEditor" contenteditable="true" spellcheck="false" aria-label="Your notes">
-                </div>
+            <!-- ── BOTTOM BAR ── -->
+            <div class="bottom-bar">
+                <button class="options-btn" id="optionsBtn" aria-label="Options">options</button>
+                <img src="assets/moth-bottom.png" class="bottom-moth" alt="">
+                <img src="assets/butterfly-bottom.png" class="bottom-butterfly" alt="">
             </div>
 
         </div>
-
     </div>
 
     <script src="popup.js"></script>
