@@ -356,7 +356,7 @@ function updateHeader() {
 
     // Show clear button only when there are completed items (if button exists)
     const hasCompleted = Object.keys(doc.completed).length > 0;
-    if (clearBtn) clearBtn.style.display = hasCompleted ? 'inline-block' : 'none';
+    if (clearCompletedBtn) clearCompletedBtn.style.display = hasCompleted ? 'inline-block' : 'none';
 }
 
 // ─── BADGE ────────────────────────────────────────────────
