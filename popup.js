@@ -219,31 +219,41 @@ function outdent() {
 }
 
 // ─── SYNC BLOCKS ──────────────────────────────────────────
-// Ensures every block in the editor has a data-id attribute.
-// Runs after every input event to catch new blocks Chrome creates on Enter,
-// new <li> elements created inside a <ul>, or bare text nodes.
+// Ensures every block in the editor has a unique data-id.
+// Chrome clones attributes (including data-id) when creating new paragraphs via Enter.
+// We must detect these duplicates and assign new IDs.
 function syncBlocks() {
+    const seenIds = new Set();
+
     Array.from(editor.childNodes).forEach(node => {
         // Bare text node — Chrome sometimes creates these. Wrap in <p>.
         if (node.nodeType === Node.TEXT_NODE) {
             if (node.textContent.trim() === '') return; // skip whitespace-only
             const p = document.createElement('p');
-            p.dataset.id = generateId();
+            const newId = generateId();
+            p.dataset.id = newId;
             p.textContent = node.textContent;
             node.replaceWith(p);
+            seenIds.add(newId);
             return;
         }
         if (node.nodeType !== Node.ELEMENT_NODE) return;
 
-        // Top-level p or div — give it an ID if it doesn't have one
+        // Top-level p or div
         if (node.tagName === 'P' || node.tagName === 'DIV') {
-            if (!node.dataset.id) node.dataset.id = generateId();
+            if (!node.dataset.id || seenIds.has(node.dataset.id)) {
+                node.dataset.id = generateId();
+            }
+            seenIds.add(node.dataset.id);
         }
 
-        // ul — give each li an ID
+        // ul — check each li
         if (node.tagName === 'UL') {
             node.querySelectorAll('li').forEach(li => {
-                if (!li.dataset.id) li.dataset.id = generateId();
+                if (!li.dataset.id || seenIds.has(li.dataset.id)) {
+                    li.dataset.id = generateId();
+                }
+                seenIds.add(li.dataset.id);
             });
         }
     });
