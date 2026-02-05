@@ -2,6 +2,14 @@
 const STORAGE_KEY = 'sporecache_doc';
 const SETTINGS_KEY = 'sporecache_settings';
 
+const SPORE_TAGS = {
+    urgent: { emoji: '🔴🍄', label: 'Urgent' },
+    work: { emoji: '💼🍄', label: 'Work' },
+    personal: { emoji: '🏠🍄', label: 'Personal' },
+    ideas: { emoji: '💡🍄', label: 'Ideas' },
+    waiting: { emoji: '⏳🍄', label: 'Waiting' }
+};
+
 // ─── DOM REFS ─────────────────────────────────────────────
 const editor          = document.getElementById('docEditor');
 const checkboxLayer   = document.getElementById('checkboxLayer');
@@ -13,6 +21,7 @@ const optionsClose    = document.getElementById('optionsClose');
 const darkModeToggle  = document.getElementById('darkModeToggle');
 const fontSizeSelect  = document.getElementById('fontSizeSelect');
 const accentSwatches  = document.getElementById('accentSwatches');
+const tagPicker       = document.getElementById('tagPicker');
 const clearCompletedBtn = document.getElementById('clearCompletedBtn');
 const completedCount  = document.getElementById('completedCount');
 const exportBtn       = document.getElementById('exportBtn');
@@ -22,6 +31,7 @@ const exportBtn       = document.getElementById('exportBtn');
 // doc.completed — { blockId: completedAtTimestamp, ... }
 let doc = { html: '', completed: {} };
 let settings = { darkMode: false, fontSize: 13, accent: 'purple' };
+let lastActiveBlock = null;
 let saveTimer = null;
 
 // ─── INIT ─────────────────────────────────────────────────
@@ -36,7 +46,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     updateHeader();
     updateBadge();
     toggleEmptyState();
+    toggleEmptyState();
     focusEnd();
+    renderTags();
 
     editor.addEventListener('input',  onInput);
     editor.addEventListener('keydown', onKeyDown);
@@ -64,6 +76,13 @@ function onInput() {
     updateBadge();
     toggleEmptyState();
     debounceSave();
+    
+    // Slash commands & NLP
+    const block = getActiveBlock();
+    if (block) {
+        checkSlashCommand(block);
+        parseNaturalLanguage(block);
+    }
 }
 
 // ─── PASTE HANDLER ────────────────────────────────────────
@@ -482,6 +501,10 @@ function focusEnd() {
 // ─── OPTIONS PANEL ────────────────────────────────────────
 
 function openOptions() {
+    // Capture the active block before focus moves to the panel
+    const block = getActiveBlock();
+    if (block) lastActiveBlock = block;
+
     optionsPanel.classList.add('open');
     updateCompletedCount();
 }
@@ -583,4 +606,158 @@ function exportNotes() {
     setTimeout(() => {
         exportBtn.textContent = 'Export Notes';
     }, 1500);
+}
+    setTimeout(() => {
+        exportBtn.textContent = 'Export Notes';
+    }, 1500);
+}
+
+// ─── SPORE TAGS ───────────────────────────────────────────
+
+function renderTags() {
+    if (!tagPicker) return;
+    
+    tagPicker.innerHTML = '';
+    
+    Object.keys(SPORE_TAGS).forEach(key => {
+        const tag = SPORE_TAGS[key];
+        const btn = document.createElement('button');
+        btn.className = 'tag-btn';
+        btn.textContent = tag.emoji;
+        btn.title = tag.label;
+        btn.addEventListener('click', () => {
+            // Use the last active block if available, fallback to appending at end
+            let target = lastActiveBlock;
+            if (!target || !editor.contains(target)) {
+                // If no valid active block, try to find the last block
+                const blocks = getAllBlocks();
+                target = blocks.length > 0 ? blocks[blocks.length - 1] : null;
+            }
+            
+            if (target) {
+                addTagToBlock(target, key);
+                closeOptions(); // Close panel to return to editing
+            }
+        });
+        tagPicker.appendChild(btn);
+    });
+}
+
+function addTagToBlock(blockEl, tagKey) {
+    const tag = SPORE_TAGS[tagKey];
+    
+    // Create the tag element
+    // We use a contenteditable="false" span effectively, 
+    // but the user spec was just a span. contenteditable=false is safer for deletion.
+    const tagSpan = document.createElement('span');
+    tagSpan.className = 'spore-tag';
+    tagSpan.dataset.tag = tagKey;
+    tagSpan.textContent = tag.emoji + ' '; // Add space for separation
+    tagSpan.contentEditable = 'false'; // Treat as a single unit
+    
+    // Check if block already starts with this tag to prevent duplicates?
+    // User didn't specify, but let's just prepend.
+    
+    // Insert at start of block
+    if (blockEl.firstChild) {
+        blockEl.insertBefore(tagSpan, blockEl.firstChild);
+    } else {
+        blockEl.appendChild(tagSpan);
+    }
+    
+    saveDoc();
+    
+    // Ensure focus returns to the block after the tag
+    // This requires a bit of range manipulation
+    */
+}
+
+// ─── SLASH COMMANDS & NLP ─────────────────────────────────
+
+function checkSlashCommand(block) {
+    const text = block.textContent;
+    
+    // Commands map
+    const tagCommands = {
+        '/urgent': 'urgent',
+        '/work': 'work',
+        '/home': 'personal',
+        '/idea': 'ideas',
+        '/wait': 'waiting'
+    };
+
+    const actionCommands = {
+        '/clear': () => clearCompleted(),
+        '/export': () => exportNotes()
+    };
+    
+    // 1. Check for Action Commands (exact match)
+    for (const [cmd, action] of Object.entries(actionCommands)) {
+        if (text.trim() === cmd) {
+            block.textContent = ''; // clear the command
+            action();
+            return;
+        }
+    }
+
+    // 2. Check for Tag Commands (ending with command + space)
+    // We trigger when user types space after the command
+    for (const [cmd, tagKey] of Object.entries(tagCommands)) {
+        // Regex: ends with " /cmd " (space is the trigger)
+        // Note: textContent includes the space we just typed
+        // But non-breaking space might confuse things.
+        
+        if (text.endsWith(cmd + ' ') || text.endsWith(cmd + '\u00A0')) {
+            // Remove the command and space
+            const cmdLength = cmd.length + 1; // +1 for space
+            
+            // Text node replacement to preserve other content
+            const sel = window.getSelection();
+            if (sel.rangeCount) {
+                const node = sel.getRangeAt(0).startContainer;
+                if (node.nodeType === Node.TEXT_NODE) {
+                    const content = node.textContent;
+                     // Replace the FIRST occurrence of the command at the end? 
+                     // Or just slice off the end
+                     if (content.endsWith(cmd + ' ') || content.endsWith(cmd + '\u00A0')) {
+                         node.textContent = content.substring(0, content.length - cmdLength);
+                         // Move cursor to end of node
+                         const range = document.createRange();
+                         range.selectNodeContents(node);
+                         range.collapse(false);
+                         sel.removeAllRanges();
+                         sel.addRange(range);
+                     }
+                }
+            }
+            
+            addTagToBlock(block, tagKey);
+            return;
+        }
+    }
+}
+
+function parseNaturalLanguage(block) {
+    // Only parse if not already containing a time tag to avoid spam
+    if (block.querySelector('.spore-tag[data-tag="waiting"]')) return;
+
+    const text = block.textContent.toLowerCase();
+    
+    const timePatterns = [
+        /\btomorrow\b/,
+        /\bnext week\b/,
+        /\bfriday\b/,
+        /\bmonday\b/,
+        /\btuesday\b/,
+        /\bwednesday\b/,
+        /\bthursday\b/,
+        /\bsaturday\b/,
+        /\bsunday\b/
+    ];
+    
+    const hasTime = timePatterns.some(p => p.test(text));
+    
+    if (hasTime) {
+        addTagToBlock(block, 'waiting');
+    }
 }

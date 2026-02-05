@@ -385,47 +385,78 @@ body {
     position: absolute;
     pointer-events: none;
     z-index: 10;
-    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    transition: filter 0.3s ease, transform 0.3s ease;
+    filter: drop-shadow(2px 4px 8px rgba(0,0,0,0.15));
+}
+
+.deco:hover {
+    filter: drop-shadow(2px 4px 12px rgba(0,0,0,0.25));
 }
 
 /* Top-left mushroom cluster */
 .deco-mushroom-tl {
-    width: 100px;
+    width: clamp(80px, 20vw, 110px);
     height: auto;
     top: -35px;
     left: -40px;
-    transform: rotate(-8deg);
+    transform: rotate(-8deg); /* Fallback */
+    animation: float-tl 6s ease-in-out infinite;
     z-index: 10;
 }
 
 /* Top-right mushroom */
 .deco-mushroom-tr {
-    width: 90px;
+    width: clamp(70px, 18vw, 100px);
     height: auto;
     top: -30px;
     right: -35px;
     transform: rotate(5deg);
+    animation: float-tr 6.5s ease-in-out infinite 0.5s;
     z-index: 10;
 }
 
 /* Top center moth (luna moth) */
 .deco-moth-top {
-    width: 55px;
+    width: clamp(45px, 12vw, 65px);
     height: auto;
     top: -10px;
     left: 50%;
     transform: translateX(-50%);
+    animation: float-moth 4s ease-in-out infinite 1s;
     z-index: 11;
 }
 
 /* Right side moth + mushroom cluster */
 .deco-moth-mushroom-r {
-    width: 120px;
+    width: clamp(100px, 25vw, 130px);
     height: auto;
     top: 50%;
     right: -55px;
     transform: translateY(-50%) rotate(-5deg);
+    animation: float-r 7s ease-in-out infinite 0.2s;
     z-index: 10;
+}
+
+/* ─── ANIMATIONS ───────────────────────────────────────────── */
+
+@keyframes float-tl {
+    0%, 100% { transform: translateY(0px) rotate(-8deg); }
+    50% { transform: translateY(-10px) rotate(-8deg); }
+}
+
+@keyframes float-tr {
+    0%, 100% { transform: translateY(0px) rotate(5deg); }
+    50% { transform: translateY(-10px) rotate(5deg); }
+}
+
+@keyframes float-moth {
+    0%, 100% { transform: translateX(-50%) translateY(0px); }
+    50% { transform: translateX(-50%) translateY(-10px); }
+}
+
+@keyframes float-r {
+    0%, 100% { transform: translateY(-50%) rotate(-5deg); }
+    50% { transform: translateY(calc(-50% - 10px)) rotate(-5deg); }
 }
 
 /* ─── RESPONSIVE / HOVER EFFECTS ───────────────────────────── */
@@ -435,20 +466,22 @@ body {
     transition: transform 0.3s ease;
 }
 
-.device-container:hover .deco-mushroom-tl {
-    transform: rotate(-10deg) scale(1.02);
+/* Hover interactions - Pause animation on hover */
+.device-container:hover .deco {
+    animation-play-state: paused;
 }
 
-.device-container:hover .deco-mushroom-tr {
-    transform: rotate(7deg) scale(1.02);
-}
-
-.device-container:hover .deco-moth-top {
-    transform: translateX(-50%) translateY(-2px);
-}
-
+/* Slight lift on hover */
+.device-container:hover .deco-mushroom-tl,
+.device-container:hover .deco-mushroom-tr,
+.device-container:hover .deco-moth-top,
 .device-container:hover .deco-moth-mushroom-r {
-    transform: translateY(-50%) rotate(-3deg) scale(1.02);
+    /* 
+       Note: We are not applying transform on hover anymore because it conflicts 
+       with the running animation. The paused state allows the user to 'catch' 
+       the floating elements.
+    */
+    filter: drop-shadow(2px 6px 14px rgba(0,0,0,0.3));
 }
 
 /* ─── SELECTION STYLING ────────────────────────────────────── */
@@ -632,6 +665,48 @@ body {
     height: 1px;
     background: rgba(0, 0, 0, 0.08);
     margin: 4px 0;
+}
+
+/* Tag Picker */
+.tag-picker {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.tag-btn {
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 6px;
+    font-size: 16px;
+    padding: 4px 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.tag-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-color: rgba(0,0,0,0.2);
+}
+
+/* Spore Tags in Editor */
+.spore-tag {
+    display: inline-block;
+    font-size: 14px;
+    margin-right: 6px;
+    cursor: grab;
+    opacity: 0.85;
+    transition: all 0.2s ease;
+    user-select: none;
+    -webkit-user-select: none;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));
+}
+
+.spore-tag:hover {
+    opacity: 1;
+    transform: scale(1.15) rotate(5deg);
 }
 
 /* Action Buttons */
