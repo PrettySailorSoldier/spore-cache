@@ -140,3 +140,48 @@ function setBadge(doc) {
     chrome.action.setBadgeText({ text: count > 0 ? String(count) : '' });
     chrome.action.setBadgeBackgroundColor({ color: '#5eead4' });
 }
+
+// ─── EXTERNAL API ─────────────────────────────────────────
+
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+    if (msg.action === 'addTask') {
+        addTaskFromExternal(msg.text, msg.tags)
+            .then(() => sendResponse({ success: true }))
+            .catch(err => sendResponse({ success: false, error: err.message }));
+        return true; // Keep channel open
+    }
+});
+
+async function addTaskFromExternal(text, tags) {
+    const result = await chrome.storage.local.get([STORAGE_KEY]);
+    let doc = result[STORAGE_KEY] || { html: '', completed: {} };
+    
+    const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+    let tagHtml = '';
+    
+    const TAG_MAP = {
+        urgent: '🔴🍄',
+        work: '💼🍄',
+        personal: '🏠🍄',
+        ideas: '💡🍄',
+        waiting: '⏳🍄'
+    };
+    
+    if (tags && Array.isArray(tags)) {
+        tags.forEach(t => {
+            const emoji = TAG_MAP[t];
+            if (emoji) {
+                tagHtml += `<span class="spore-tag" data-tag="${t}" contenteditable="false">${emoji} </span>`;
+            }
+        });
+    }
+    
+    // Basic sanitization of text to prevent breaking HTML structure
+    const safeText = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const newBlock = `<p data-id="${id}">${tagHtml}${safeText}</p>`;
+    
+    doc.html += newBlock;
+    
+    await chrome.storage.local.set({ [STORAGE_KEY]: doc });
+    setBadge(doc);
+}

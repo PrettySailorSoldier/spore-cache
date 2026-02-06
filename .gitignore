@@ -1,0 +1,6 @@
+# Ignore the prompts folder so it stays local
+prompts/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
