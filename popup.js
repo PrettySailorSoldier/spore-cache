@@ -607,10 +607,7 @@ function exportNotes() {
         exportBtn.textContent = 'Export Notes';
     }, 1500);
 }
-    setTimeout(() => {
-        exportBtn.textContent = 'Export Notes';
-    }, 1500);
-}
+
 
 // ─── SPORE TAGS ───────────────────────────────────────────
 
@@ -669,7 +666,7 @@ function addTagToBlock(blockEl, tagKey) {
     
     // Ensure focus returns to the block after the tag
     // This requires a bit of range manipulation
-    */
+
 }
 
 // ─── SLASH COMMANDS & NLP ─────────────────────────────────
