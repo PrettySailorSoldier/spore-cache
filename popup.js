@@ -77,11 +77,11 @@ function onInput() {
     toggleEmptyState();
     debounceSave();
     
-    // Slash commands & NLP
+    // Slash commands only (NLP disabled for now to prevent data loss)
     const block = getActiveBlock();
     if (block) {
         checkSlashCommand(block);
-        parseNaturalLanguage(block);
+        // parseNaturalLanguage(block); // TODO: Make this opt-in
     }
 }
 
